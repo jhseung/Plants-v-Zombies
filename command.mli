@@ -18,3 +18,4 @@ type command = Look | Move of move | Flip | Restart | Quit | Moves of int
              | Undo | Hint
 
 
+type mode = Game | Store
