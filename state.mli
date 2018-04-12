@@ -22,7 +22,8 @@ type state = {tableau: (card list) list; foundation: (card list) list;
  RI: TODO *)
 val rep_ok : state -> state
 
-(* [init_state s] is the initial state when the game starts for the first time. 
+(* [init_state i] is the initial state when the game starts for the first time. 
+ * Initializes the game with i characters in the first column, i + 1 in the second etc.
  * This function is used to define a starting position.*)
 val init_state : state
 
