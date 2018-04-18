@@ -1,5 +1,7 @@
 type state = (tile array) array
 
+type object = |Animated of animated |Static of plant
+
 (* [rep_ok s] determines whether the current state [s] of the program is
  * valid
  AI: TODO
@@ -19,3 +21,5 @@ val do' : Command.command -> state -> state
 (* Update all the tiles by one move *)
 val update: state -> unit
 
+(* Returns the coordinates of the object *)
+val get_coordinates: object -> int*int
