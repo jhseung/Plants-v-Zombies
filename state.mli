@@ -2,12 +2,6 @@ type state = (tile array) array
 
 type object = |Animated of animated |Static of plant
 
-(* [rep_ok s] determines whether the current state [s] of the program is
- * valid
- AI: TODO
- RI: TODO *)
-val rep_ok : state -> state
-
 (* [init_state col row] is the initial state with col columns and row rows. *)
 val init_state : int -> int -> state
 
