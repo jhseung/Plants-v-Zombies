@@ -1,8 +1,6 @@
-type state = (tile array) array
+type state = (Tile.tile array) array
 
-type object = |Animated of animated |Static of plant
-
-type info = {zombies: zombie; plants: plant; projectiles: projectile}
+type info = {zombies: Object.zombie; plants: Object.plant; projectiles: Object.projectile}
 
 (* [init_state col row] is the initial state with col columns and row rows. *)
 val init_state : int -> int -> state
@@ -21,10 +19,10 @@ val update: state -> unit
 val get_info: state -> info
 
 (* Returns the coordinates of the object *)
-val get_coordinates: object -> int*int
+val get_coordinates: Object.object -> int*int
 
 (* Returns the state with a new plant at coordinates (x, y) *)
-val make_plant: shooter -> int -> int -> state
+val make_plant: Object.shooter -> int -> int -> state
 
 (* Return sthe state with a new zombie at coordinates (x, y) *)
-val make_zombie: mummy -> int -> int -> state
+val make_zombie: Object.mummy -> int -> int -> state
