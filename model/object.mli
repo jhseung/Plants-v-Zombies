@@ -16,12 +16,12 @@ type plant = {plant: shooter; mutable tile: tile; mutable HP: int}
 
 type object = |Moving of moving |Static of plant
 
-(* plant a shooter on tile *)
-val: plant: shooter -> tile -> plant
+(* Plants a type of flora on tile *)
+val: plant: flora -> tile -> plant
 
 (* Moves the moving object from the current tile to the next tile *)
-val next_tile: animated -> unit
+val next_tile: moving -> unit
 
 (* Update the step count of the moving object by one move (=speed)
 If step >= tile.size, moves moving object to the next tile. *)
-val move: animated -> unit
+val move: moving -> unit
