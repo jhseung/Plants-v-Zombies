@@ -20,6 +20,9 @@ val get_objects: state -> objects
 (* Returns the coordinates of the object *)
 val get_coordinates: Object.object -> int*int
 
+(* Returns the type of the object as a string id. *)
+val get_type: Object.object -> string
+
 (* Updates the state with a new plant at coordinates (x, y) *)
 val make_plant: Object.shooter -> int -> int -> unit
 
