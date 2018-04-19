@@ -1,4 +1,4 @@
-type state = {tiles: (Tile.tile array) array; sunlight: int}
+type state = {tiles: (Tile.tile array) array; mutable sunlight: int}
 
 type objects = {zombies: Object.zombie list; plants: Object.plant list; projectiles: Object.projectile list}
 
