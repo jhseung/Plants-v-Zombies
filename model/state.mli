@@ -2,7 +2,7 @@ type state = {tiles: (Tile.tile array) array; mutable sunlight: int}
 
 type objects = {zombies: Object.zombie list; plants: Object.plant list; projectiles: Object.projectile list}
 
-(* [init_state col row] is the initial state with col columns and row rows. *)
+(* Returns the initial state with x columns and y rows. *)
 val init_state: int -> int -> state
 
 (* Returns the number of sunlight. *)
