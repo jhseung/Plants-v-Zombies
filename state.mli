@@ -22,3 +22,9 @@ val get_info: state -> info
 
 (* Returns the coordinates of the object *)
 val get_coordinates: object -> int*int
+
+(* Returns the state with a new plant at coordinates (x, y) *)
+val make_plant: shooter -> int -> int -> plant
+
+(* Return sthe state with a new zombie at coordinates (_, y) *)
+val make_zombie: mummy -> int -> state
