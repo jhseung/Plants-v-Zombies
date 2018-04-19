@@ -28,3 +28,9 @@ val make_zombie: Object.mummy -> int -> int -> unit
 
 (* Updates the state with get_sunflowers state + 1 sunlight *)
 val increase_sunlight: state -> unit
+
+(* Returns true if all the zombies are dead *)
+val has_won: state -> bool 
+
+(* Returns true if a zombie is at the leftmost tile and zombie.step >= tile.size *)
+val has_lost: state -> bool
