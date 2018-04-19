@@ -1,6 +1,6 @@
 type state = (Tile.tile array) array
 
-type objects = {zombies: Object.zombie; plants: Object.plant; projectiles: Object.projectile}
+type objects = {zombies: Object.zombie list; plants: Object.plant list; projectiles: Object.projectile list}
 
 (* [init_state col row] is the initial state with col columns and row rows. *)
 val init_state : int -> int -> state
