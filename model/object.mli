@@ -10,6 +10,8 @@ type zombie = {mummy: mummy; mutable pos: tile; mutable hp: int; mutable step: i
 
 type moving = |Projectile of projectile | Zombie of zombie
 
+type flora = |Shooter of shooter |Sunflower
+
 type plant = {plant: shooter; mutable tile: tile; mutable HP: int}
 
 type object = |Moving of moving |Static of plant
