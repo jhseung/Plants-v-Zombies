@@ -1,12 +1,12 @@
-type state = (Tile.tile array) array
+type state = {tiles: (Tile.tile array) array; sunlight: int}
 
 type objects = {zombies: Object.zombie list; plants: Object.plant list; projectiles: Object.projectile list}
 
 (* [init_state col row] is the initial state with col columns and row rows. *)
 val init_state : int -> int -> state
 
-(* [score s] is the current score of the state [s]. *)
-val score : state -> int
+(* Returns the number of sunlight. *)
+val get_sunlight : state -> int
 
 (* [do' c s] returns a new state [s'] that represents the new state after a command [c]
  * has been made on state [s]. Returns [s] if [c] is not a valid command.  *)
@@ -21,8 +21,11 @@ val get_objects: state -> objects
 (* Returns the coordinates of the object *)
 val get_coordinates: Object.object -> int*int
 
-(* Returns the state with a new plant at coordinates (x, y) *)
-val make_plant: Object.shooter -> int -> int -> state
+(* Updates the state with a new plant at coordinates (x, y) *)
+val make_plant: Object.shooter -> int -> int -> unit
 
-(* Return sthe state with a new zombie at coordinates (x, y) *)
-val make_zombie: Object.mummy -> int -> int -> state
+(* Updates sthe state with a new zombie at coordinates (x, y) *)
+val make_zombie: Object.mummy -> int -> int -> unit
+
+(* Updates the state with one more sunlight *)
+val increase_sunlight: state -> unit
