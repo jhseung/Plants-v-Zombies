@@ -1,6 +1,6 @@
 type state = (Tile.tile array) array
 
-type info = {zombies: Object.zombie; plants: Object.plant; projectiles: Object.projectile}
+type objects = {zombies: Object.zombie; plants: Object.plant; projectiles: Object.projectile}
 
 (* [init_state col row] is the initial state with col columns and row rows. *)
 val init_state : int -> int -> state
@@ -15,8 +15,8 @@ val do' : Command.command -> state -> state
 (* Update all the tiles by one move *)
 val update: state -> unit
 
-(* Returns the info for the state *)
-val get_info: state -> info
+(* Returns the objects in the state *)
+val get_objects: state -> objects
 
 (* Returns the coordinates of the object *)
 val get_coordinates: Object.object -> int*int
