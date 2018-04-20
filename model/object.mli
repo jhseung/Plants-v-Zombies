@@ -6,15 +6,15 @@ type shooter = |Peashooter of info |Cactus of info
 
 type projectile = {shooter: shooter; mutable tile: tile; mutable step: int}
 
-type zombie = {mummy: mummy; mutable pos: tile; mutable hp: int; mutable step: int}
+type zombie = {mummy: mummy; mutable pos: tile; mutable hp: int; 
+mutable step: int; mutable with_plant: bool; mutable with_projectile: bool}
 
 type moving = |Projectile of projectile | Zombie of zombie
 
 type flora = |Shooter of shooter |Sunflower
 
-type plant = {plant: shooter; mutable tile: tile; mutable HP: int}
-
-type object = |Moving of moving |Static of plant
+type plant = {plant: shooter; mutable tile: tile; mutable HP: int; 
+mutable with_zombie: bool}
 
 (* Plants a type of flora on tile *)
 val: plant: flora -> tile -> plant
