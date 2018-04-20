@@ -20,7 +20,8 @@ val get_objects: state -> objects
 (* Returns the coordinates of the object *)
 val get_coordinates: Object.object -> int*int
 
-(* Returns the type of the object as a string id. *)
+(* Returns the type of the object, i.e. type of mummy, type of 
+flora, type of projectile, as a string id. *)
 val get_type: Object.object -> string
 
 (* Updates the state with a new plant at coordinates (x, y) *)
@@ -28,6 +29,9 @@ val make_plant: Object.shooter -> int -> int -> unit
 
 (* Updates sthe state with a new zombie at coordinates (x, y) *)
 val make_zombie: Object.mummy -> int -> int -> unit
+
+(* Updates the state with a projective originating from the plant *)
+val make_projectile: Object.plant -> unit
 
 (* Updates the state with get_sunflowers state + 1 sunlight *)
 val increase_sunlight: state -> unit
