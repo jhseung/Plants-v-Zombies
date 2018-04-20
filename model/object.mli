@@ -17,7 +17,7 @@ type plant = {plant: shooter; mutable tile: tile; mutable hp: int;
 mutable attacked: bool}
 
 (* Plants a type of flora on tile *)
-val plant: flora -> tile -> plant
+val plant: flora -> tile -> unit
 
 (* Moves the moving object from the current tile to the next tile *)
 val next_tile: moving -> unit
