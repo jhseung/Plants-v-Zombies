@@ -1,5 +1,9 @@
 type state = {tiles: (Tile.tile array) array; mutable sunlight: int}
 
+type object = |Zombie of zombie |Plant of plant |Projectile of projectile
+
+type character = |Z of zombie |P of plant
+
 (* Returns the initial state with x columns and y rows with size for tiles. *)
 val init_state: int -> int -> int -> state
 
@@ -40,3 +44,15 @@ val has_won: state -> bool
 
 (* Returns true if a zombie is at the leftmost tile and zombie.step >= tile.size *)
 val has_lost: state -> bool
+
+(* Returns true if the plant is being attacked. *)
+val plant_attacked: plant -> bool
+
+(* Returns true if the zombie is being attacked. *)
+val zombie_attacked: zombie -> bool
+
+(* Returns true if the zombie is attacking. *)
+val zombie_attacking: zombie -> bool
+
+(* Returns the hp of the character. *)
+val get_hp: character -> int
