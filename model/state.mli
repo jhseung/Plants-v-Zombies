@@ -8,9 +8,6 @@ val init_state: int -> int -> state
 (* Returns the number of sunlight. *)
 val get_sunlight: state -> int
 
-(* Returns the number of sunflowers. *)
-val get_sunflowers: state -> int
-
 (* Update all the tiles by one move *)
 val update: state -> unit
 
@@ -33,7 +30,11 @@ val make_zombie: Object.mummy -> int -> int -> unit
 (* Updates the state with a projective originating from the plant *)
 val make_projectile: Object.plant -> unit
 
-(* Updates the state with get_sunflowers state + 1 sunlight *)
+(* Updates the state with n additional sunlight, with 
+n = number of sunflowers *)
+val sunflower_sunlight: state -> unit
+
+(* Updates the state with 1 additional sunlight *)
 val increase_sunlight: state -> unit
 
 (* Returns true if all the zombies are dead *)
