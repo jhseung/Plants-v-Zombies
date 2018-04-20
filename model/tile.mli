@@ -1,3 +1,5 @@
+open Object
+
 type tile = {x: int; y: int; size: int; mutable zombies: zombie list; 
 mutable plant: plant option; left: tile; right: tile; 
 mutable projectiles: projectile list}
