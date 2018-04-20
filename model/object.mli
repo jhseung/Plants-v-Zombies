@@ -1,3 +1,5 @@
+open Tile
+
 type info = {speed: int; hp: int}
 
 type mummy = |Normal of info |Conehead of info |Buckethead of info 
