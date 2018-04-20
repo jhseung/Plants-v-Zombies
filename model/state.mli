@@ -16,14 +16,14 @@ val get_sunlight: state -> int
 val update: state -> unit
 
 (* Returns the objects in the state *)
-val get_objects: state -> Object.object list
+val get_objects: state -> object list
 
 (* Returns the coordinates of the object *)
-val get_coordinates: Object.object -> int*int
+val get_coordinates: object -> int*int
 
 (* Returns the type of the object, i.e. type of mummy, type of 
 flora, type of projectile, as a string id. *)
-val get_type: Object.object -> string
+val get_type: object -> string
 
 (* Updates the state with a new plant at coordinates (x, y) *)
 val make_plant: Object.shooter -> int -> int -> unit
