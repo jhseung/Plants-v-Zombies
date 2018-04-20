@@ -27,7 +27,7 @@ val make_plant: Object.shooter -> int -> int -> unit
 (* Updates sthe state with a new zombie at coordinates (x, y) *)
 val make_zombie: Object.mummy -> int -> int -> unit
 
-(* Updates the state with a projective originating from the plant *)
+(* Updates the state with a projectile originating from the plant *)
 val make_projectile: Object.plant -> unit
 
 (* Updates the state with n additional sunlight, with 
