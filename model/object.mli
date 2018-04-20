@@ -6,7 +6,8 @@ type mummy = |Normal of info |Conehead of info |Buckethead of info
 
 type shooter = |Peashooter of info |Cactus of info
 
-type projectile = {shooter: shooter; mutable tile: tile; mutable step: int}
+type projectile = {shooter: shooter; mutable tile: tile; mutable step: int
+mutable attacking: bool}
 
 type zombie = {mummy: mummy; mutable pos: tile; mutable hp: int; 
 mutable step: int; mutable attacked: bool; mutable attacking: bool}
