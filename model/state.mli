@@ -1,11 +1,13 @@
-type state = {tiles: (Tile.tile array) array; mutable sunlight: int}
+type state = {top_left: int*int; tiles: (Tile.tile array) array; 
+mutable sunlight: int}
 
 type object = |Zombie of zombie |Plant of plant |Projectile of projectile
 
 type character = |Z of zombie |P of plant
 
-(* Returns the initial state with x columns and y rows with size for tiles. *)
-val init_state: int -> int -> int -> state
+(* Returns the initial state with number of columns, number of rows, 
+size, and coordinates (x, y) for top left corner. *)
+val init_state: int -> int -> int -> int*int -> state
 
 (* Returns the number of sunlight. *)
 val get_sunlight: state -> int
