@@ -17,7 +17,6 @@ type state = {
   sunlights: sunlight list;
   mutable sun_bal : int;
   mutable total: int;
-  stock: (flora * int) list
 }
 
 type objects = {
@@ -109,3 +108,5 @@ val projectile_attacking: projectile -> bool
 
 (* Returns the hp of the character. *)
 val get_hp: character -> int
+
+type stock = (flora * int) list
