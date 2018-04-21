@@ -28,6 +28,10 @@ type objects = {
 
 type character = |Z of zombie |P of plant
 
+
+(*position of sunlight and number of time steps since created*)
+type sunlight = {pos : int*int; age : int}
+
 (* [init_state c r s (x,y)] is the initial state with number of columns [c],
    number of rows [r], tile size [s], and coordinates [(x, y)] for top left
    corner.
