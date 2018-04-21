@@ -27,7 +27,11 @@ type item = |Zombie of zombie |Plant of plant
 
 type moving = |Projectile of projectile | Zombie of zombie
 
-(* Plants a type of flora on tile *)
+(*position of sunlight and number of time steps since created*)
+type sunlight = {pos : int*int; age : int}
+
+(* Plants a type of flora on tile
+   requires: no zombie is on the tile. *)
 val plant: flora -> tile -> unit
 
 (* Moves the moving object from the current tile to the next tile *)
