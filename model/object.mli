@@ -2,22 +2,25 @@ open Tile
 
 type info = {speed: int; hp: int}
 
-type mummy = |Normal of info |Conehead of info |Buckethead of info 
+type mummy = |Normal of info |Conehead of info |Buckethead of info
 
 type shooter = |Peashooter of info |Cactus of info
 
 type projectile = {shooter: shooter; mutable tile: tile; mutable step: int
 mutable attacking: bool}
 
-type zombie = {mummy: mummy; mutable pos: tile; mutable hp: int; 
+type zombie = {mummy: mummy; mutable pos: tile; mutable hp: int;
 mutable step: int; mutable attacked: bool; mutable attacking: bool}
 
 type moving = |Projectile of projectile | Zombie of zombie
 
 type flora = |Shooter of shooter |Sunflower
 
-type plant = {plant: shooter; mutable tile: tile; mutable hp: int; 
+type plant = {plant: shooter; mutable tile: tile; mutable hp: int;
 mutable attacked: bool}
+
+(*position of sunlight*)
+type sunlight = int*int
 
 (* Plants a type of flora on tile *)
 val plant: flora -> tile -> unit
