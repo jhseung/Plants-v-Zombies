@@ -100,9 +100,6 @@ val zombie_attacked: zombie -> bool
 (* Returns true if the zombie is attacking. *)
 val zombie_attacking: zombie -> bool
 
-(* Returns true if the projectile is attacking *)
-val projectile_attacking: projectile -> bool
-
 (* Returns the hp of the character. *)
 val get_hp: character -> int
 
