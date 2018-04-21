@@ -23,17 +23,3 @@ type item = |Zombie of zombie |Plant of plant
               |Projectile of projectile
 
 type moving = |Projectile of projectile | Zombie of zombie
-
-(*position of sunlight and number of time steps since created*)
-type sunlight = {pos : int*int; age : int}
-
-(* Plants a type of flora on tile
-   requires: no zombie is on the tile. *)
-val plant: flora -> tile -> unit
-
-(* Moves the moving object from the current tile to the next tile *)
-val next_tile: moving -> unit
-
-(* Update the step count of the moving object by one move (=speed)
-If step >= tile.size, moves moving object to the next tile. *)
-val move: moving -> unit
