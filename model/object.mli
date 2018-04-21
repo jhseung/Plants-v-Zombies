@@ -28,7 +28,7 @@ type item = |Zombie of zombie |Plant of plant
 type moving = |Projectile of projectile | Zombie of zombie
 
 (* Plants a type of flora on tile
-   requires: no zombie is on the tile. *)
+   requires: no zombie or flora is on the tile. *)
 val plant: flora -> tile -> unit
 
 (* Moves the moving object from the current tile to the next tile *)

@@ -87,6 +87,7 @@ val add_sunlight: sunlight list -> state -> unit
 (* Returns true if total = 0 and List.length objects.zombies = 0*)
 val has_won: state -> bool
 
+(* Checks for leftmost tiles only *)
 (* Returns true if a zombie is at the leftmost tile and zombie.step >= tile.size *)
 val has_lost: state -> bool
 
