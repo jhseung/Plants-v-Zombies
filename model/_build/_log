@@ -1,0 +1,54 @@
+### Starting build.
+# Target: state.mli.depends, tags: { extension:mli, file:state.mli, ocaml, ocamldep, quiet }
+ocamlfind ocamldep -modules state.mli > state.mli.depends
+# Target: object.mli.depends, tags: { extension:mli, file:object.mli, ocaml, ocamldep, quiet }
+ocamlfind ocamldep -modules object.mli > object.mli.depends
+# Target: object.cmi, tags: { byte, compile, extension:mli, file:object.mli, interf, ocaml, quiet }
+ocamlfind ocamlc -c -o object.cmi object.mli
+# Target: state.cmi, tags: { byte, compile, extension:mli, file:state.mli, interf, ocaml, quiet }
+ocamlfind ocamlc -c -o state.cmi state.mli
+# Target: state.ml.depends, tags: { extension:ml, file:state.ml, ocaml, ocamldep, quiet }
+ocamlfind ocamldep -modules state.ml > state.ml.depends
+# Target: state.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:state.cmo, file:state.ml, implem, ocaml, quiet }
+ocamlfind ocamlc -c -o state.cmo state.ml
++ ocamlfind ocamlc -c -o state.cmo state.ml
+File "state.ml", line 1:
+Error: The implementation state.ml does not match the interface state.cmi:
+       The value `get_hp' is required but not provided
+       File "state.mli", line 67, characters 0-28: Expected declaration
+       The value `projectile_attacking' is required but not provided
+       File "state.mli", line 64, characters 0-44: Expected declaration
+       The value `zombie_attacking' is required but not provided
+       File "state.mli", line 61, characters 0-36: Expected declaration
+       The value `zombie_attacked' is required but not provided
+       File "state.mli", line 58, characters 0-35: Expected declaration
+       The value `plant_attacked' is required but not provided
+       File "state.mli", line 55, characters 0-33: Expected declaration
+       The value `has_lost' is required but not provided
+       File "state.mli", line 52, characters 0-27: Expected declaration
+       The value `has_won' is required but not provided
+       File "state.mli", line 49, characters 0-26: Expected declaration
+       The value `increase_sunlight' is required but not provided
+       File "state.mli", line 46, characters 0-36: Expected declaration
+       The value `sunflower_sunlight' is required but not provided
+       File "state.mli", line 43, characters 0-37: Expected declaration
+       The value `make_projectile' is required but not provided
+       File "state.mli", line 39, characters 0-34: Expected declaration
+       The value `make_zombie' is required but not provided
+       File "state.mli", line 36, characters 0-44: Expected declaration
+       The value `make_plant' is required but not provided
+       File "state.mli", line 33, characters 0-45: Expected declaration
+       The value `get_type' is required but not provided
+       File "state.mli", line 30, characters 0-28: Expected declaration
+       The value `get_coordinates' is required but not provided
+       File "state.mli", line 26, characters 0-36: Expected declaration
+       The value `get_objects' is required but not provided
+       File "state.mli", line 23, characters 0-33: Expected declaration
+       The value `update' is required but not provided
+       File "state.mli", line 20, characters 0-25: Expected declaration
+       The value `get_sunlight' is required but not provided
+       File "state.mli", line 17, characters 0-30: Expected declaration
+       The value `init_state' is required but not provided
+       File "state.mli", line 14, characters 0-53: Expected declaration
+Command exited with code 2.
+# Compilation unsuccessful.
