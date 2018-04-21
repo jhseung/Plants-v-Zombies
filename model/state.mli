@@ -42,11 +42,7 @@ val init_state: int -> int -> int -> int*int -> state
 (* Returns the number of sunlight. *)
 val get_sunlight: state -> int
 
-(* Chengyan: Jaclyn, can you be more specific about what this does?
-   To avoid repetitive code, I need to know if this updates z_hp, attacked, ...
-   of the zombie list and plant in each tile, or this only cares about the
-   positions.*)
-(* Update all the tiles by one move *)
+(* Update all the objects on every tile by one move *)
 val update: state -> unit
 
 (* Returns the objects in the state *)
