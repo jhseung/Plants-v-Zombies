@@ -14,8 +14,11 @@
 type state = {
   top_left: int*int;
   tiles: (Tile.tile array) array;
-  sunlights: sunlight list;
-  mutable sun_bal : int;
+  (*sunlights: sunlight list;
+    mutable sun_bal : int;*)
+  (* sunlight field indicates how many sunlight should be made given the
+  current number of sunflowers in the state *)
+  mutable sunlight: int;
   mutable total: int;
 }
 
@@ -24,6 +27,14 @@ type objects = {
   plants: plant list;
   projectiles: projectile list
 }
+
+(* species of flora *)
+type f_species
+
+(* species of zombies *)
+type z_species
+
+(* TODO: info corresponding to each species goes here *)
 
 type character = |Z of zombie |P of plant
 
@@ -56,19 +67,23 @@ flora, type of projectile, as a string id. *)
 val get_type: item -> string
 
 (* Updates the state with a new flora at coordinates (x, y) *)
-val make_plant: flora -> int * int -> state -> unit
+val make_plant: f_species -> int * int -> state -> unit
 
 (* Updates the state with a new zombie at coordinates (x, y), state.total -= 1 *)
-val make_zombie: mummy -> int * int -> state -> unit
+val make_zombie: z_species -> int * int -> state -> unit
 
-(*[remove_plant f (x,y) st] removes the flora [f] at (x,y) from state [st].*)
-val remove_plant: flora -> int * int -> state -> unit
+(*[remove_plant (x,y) st] removes the flora at (x,y) from state [st] if
+  it there is an object of type flora on the corresponding tile.*)
+val remove_plant: int * int -> state -> unit
 
 (*[remove_zombie m (x,y) st] removes the zombie [m] at (x,y) from state [st].*)
-val remove_zombie: mummy -> int * int -> state -> unit
+(*val remove_zombie: mummy -> int * int -> state -> unit*)
 
-(* Updates the state with a projectile originating from the plant *)
-val make_projectile: plant -> unit
+(* TODO: may not be exposed, will consider making projectiles with the
+   update function *)
+(* Updates the state with a projectile originating from the flora if there
+is a shooter object on the corresponding tile *)
+val make_projectile: int * int -> unit
 
 (* Chengyan: Let me decide where to put the sunlights.
 (* Updates the state with n additional sunlight, with
@@ -103,4 +118,4 @@ val zombie_attacking: zombie -> bool
 (* Returns the hp of the character. *)
 val get_hp: character -> int
 
-type stock = (flora * int) list
+(*type stock = (flora * int) list*)

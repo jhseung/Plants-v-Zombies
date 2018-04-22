@@ -1,5 +1,6 @@
 (* TODO: freeze
-   TODO: check for collisions after move has been applied to every tile *)
+   TODO: check for collisions after move has been applied to every tile
+   TODO: clash between projectile and zombie when crossing the tiles *)
 
 type info = {species: string; speed: int; hp: int; damage: int; freeze: int}
 
