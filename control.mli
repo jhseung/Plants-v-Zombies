@@ -1,5 +1,5 @@
 open Object
-open State
+open Mega
 
 (*place holder for now*)
 type handle = unit
@@ -8,22 +8,22 @@ type handle = unit
   rows [r], tile size [s], and coordinates [(x, y)] for top left corner.*)
 val play_game : int -> int -> int -> int*int -> unit
 
-(*[player_move h] is the state after the mouse clicks by handle [h].
+(*[player_move h] is the mega state after the mouse clicks by handle [h].
   side effects: deselect any selected flora if this click is not on a flora; if
   it is on a flora then deselect any other selected flora.*)
 (*It judges if the mouse clicks the stock, a tile or a sunlight.*)
-val player_move : handle -> state
+val player_move : handle -> mega
 
 (*[available_in_stock f st] is true if the plant [f] clicked in the stock panel
-  is available in state [st] and false otherwise.
+  is available in mega state [st] and false otherwise.
   side effects: If true it makes the plant appears selected. *)
-val available_in_stock : flora -> state -> bool
+val available_in_stock : flora -> mega -> bool
 
-(*[plant_a_flora f t st] is the state [st'] after the mouse clicks the flora [f]
-  in stock and then the tile [t] in state [st]. If no zombie is on tile [t], [f]
-  is planted on [t] in [st'] and the number of flora in stock that is the same
-  as [f] is fewer in [st'] than [st] by 1. If a zombie is on tile [t], then
-  [st'] is [st].
+(*[plant_a_flora f t st] is the mega state [st'] after the mouse clicks the
+  flora [f] in stock and then the tile [t] in mega state [st]. If no zombie is
+  on tile [t], [f] is planted on [t] in [st'] and the number of flora in stock
+  that is the same as [f] is fewer in [st'] than [st] by 1. If a zombie is on
+  tile [t], then [st'] is [st].
   requires : [available_in_stock f st] is true.
   side effects : if no zombie is on tile [t], [f] is planted on [t] on the
                  screen;
@@ -31,14 +31,14 @@ val available_in_stock : flora -> state -> bool
                  flora of its type in the stock, then make its type appear grey
                  in the stock panel on the screen.
 *)
-val plant_a_flora : flora -> tile -> state -> state
+val plant_a_flora : flora -> tile -> mega -> mega
 
-(*[collect_sunlight s st] is the state [st'] after the mouse clicks the sunlight
-  [s] in state [st]. Sunlight balance is incremented by an unspecified value
-  from [st] to [st'].
+(*[collect_sunlight s st] is the mega state [st'] after the mouse clicks the
+  sunlight [s] in mega state [st]. Sunlight balance is incremented by an
+  unspecified value from [st] to [st'].
   side effects: [s] is eliminated on the screen.
 *)
-val collect_sunlight : sunlight -> state -> state
+val collect_sunlight : sunlight -> mega -> mega
 
 (*respond to an elapse of time (i.e. do in every time step):
   put sunlight in the garden according to the number of sunflowers present in
@@ -58,67 +58,70 @@ val collect_sunlight : sunlight -> state -> state
   decide whether the player has won.
 *)
 
-(*[shed_sunlight st] creates sunlights at random positions in the garden in
-  state [st] and returns the new state. The number of sunlights created equals
-  the number of sunflowers present in the garden in [st].
+(*[shed_sunlight st] creates sunlights at random positions in the garden in mega
+  state [st] and returns the new mega state. The number of sunlights created
+  equals the number of sunflowers present in the garden in [st].
   side effects: create sunlights on the screen.
 *)
-val shed_sunlight : state -> state
+val shed_sunlight : mega -> mega
 
 (*[dissipate_sunlight st] increases the age of each sunlight in [st] by 1 and
-  remove the sunlights older than an unspecified age, and returns the new state.
+  remove the sunlights older than an unspecified age, and returns the new mega
+  state.
   side effects: remove the corresponding sunlights on the screen.
 *)
-val dissipate_sunlight : state -> state
+val dissipate_sunlight : mega -> mega
 
 (*[add_to_stock st] adds unspecified types and number of flora to the stock in
-  [st] and decreases the sunlight balance accordingly to return the new state.
+  [st] and decreases the sunlight balance accordingly to return the new mega
+  state.
   side effects: if a flora of a type previously unavailable is added to the
                 stock, then make its type colored in the stock panel.*)
-val add_to_stock : state -> state
+val add_to_stock : mega -> mega
 
 (*[add_zombie st] decides whether to let more zombies enter the garden and from
   which lane(s) they enter, and if yes then adds the zombie(s) on the right edge
-  of the garden and returns the new state, otherwise returns [st].
+  of the garden and returns the new mega state, otherwise returns [st].
   side effects: create the added zombie(s) on the screen.*)
-val add_zombie : state -> state
+val add_zombie : mega -> mega
 
 (*[zombie_walk st] updates the positions of each zombie according to its
   velocity and whether it collides with a plant, after one time step from [st],
-  and returns the new state.
+  and returns the new mega state.
   side effects: update the positions of each zombie on screen.*)
-val zombie_walk : state -> state
+val zombie_walk : mega -> mega
 
 (*[attack_flora st] lets each zombie attack the flora with which it collides in
-  state [st], updates the remaining life of each attacked flora and returns the
-  new state.*)
-val attack_flora : state -> state
+  mega state [st], updates the remaining life of each attacked flora and returns
+  the new mega state.*)
+val attack_flora : mega -> mega
 
 (*[attack_zombie st] lets each shooter shoots a number of projectiles to the
   zombie(s) in the same lane as the shooter, updates the remaining life of each
-  attacked zombie and returns the new state.
+  attacked zombie and returns the new mega state.
   side effects: show projectiles on the screen.
 *)
-val attack_zombie : state -> state
+val attack_zombie : mega -> mega
 
-(*[kill_flora st] removes flora whose remaining life is 0 in state [st] from the
-  garden and returns the new state.
+(*[kill_flora st] removes flora whose remaining life is 0 in mega state [st]
+  from the garden and returns the new mega state.
   side effects: remove the corresponding flora on the screen.
 *)
-val kill_flora : state -> state
+val kill_flora : mega -> mega
 
-(*[kill_zombie st] removes zombie whose remaining life is 0 in state [st] from
-  the garden and returns the new state.
+(*[kill_zombie st] removes zombie whose remaining life is 0 in mega state [st]
+  from the garden and returns the new mega state.
   side effects: remove the corresponding zombie on the screen.
 *)
-val kill_zombie : state -> state
+val kill_zombie : mega -> mega
 
-(*[check_lost st] is true if a zombie has reached the house in state [st].
+(*[check_lost st] is true if a zombie has reached the house in mega state [st].
   side effects: if a zombie has reached the house then print the message telling
                 the player he has lost on the screen.*)
-val check_lost : state -> bool
+val check_lost : mega -> bool
 
-(*[check_win st] is true if no zombie is present in the garden in state [st].
+(*[check_win st] is true if no zombie is present in the garden in mega state
+  [st].
   side effects: if true then print the message telling the player he has won on
                 the screen.*)
-val check_win : state -> bool
+val check_win : mega -> bool
