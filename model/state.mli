@@ -1,3 +1,5 @@
+open Object
+
 (* top_left = Cartesian coordinates of the top left corner of the stock panel.
    tiles    = tiles of the garden, containing the location and size of the tiles
               as well as the zombies, plants and projectiles present in the
@@ -8,31 +10,15 @@
               player) to add plants to the stock. This is the remaining
               sunlights that have not yet been used to add plants to the stock.)
    total    = total number of zombies to be released.
-   stock    = [p1,n1; p2,n2; ...] meaning in the stock there are n1 plants of
-              type p1, n2 plants of type p2 ...
 *)
 type state = {
   top_left: int*int;
-  tiles: (Tile.tile array) array;
-  (*sunlights: sunlight list;
-    mutable sun_bal : int;*)
-  (* sunlight field indicates how many sunlight should be made given the
-  current number of sunflowers in the state *)
+  tiles: (tile array) array;
   mutable sunlight: int;
   mutable total: int;
 }
 
-type objects = {
-  zombies: zombie list;
-  plants: plant list;
-  projectiles: projectile list
-}
-
-(* species of flora *)
-type f_species
-
-(* species of zombies *)
-type z_species
+type objects = |Zombie of zombie |Plant of plant |Projectile of projectile
 
 (* TODO: info corresponding to each species goes here *)
 
@@ -40,24 +26,24 @@ type character = |Z of zombie |P of plant
 
 
 (*position of sunlight and number of time steps since created*)
-type sunlight = {pos : int*int; age : int}
+(*type sunlight = {pos : int*int; age : int}*)
 
-(* [init_state c r s (x,y)] is the initial state with number of columns [c],
+(* [init_state c r s (x,y) total] is the initial state with number of columns [c],
    number of rows [r], tile size [s], and coordinates [(x, y)] for top left
-   corner.
+   corner, [total] the total number of zombies to be released.
    No plant, zombie or projectile is present on any of the tiles in the initial
-   state. No sunlight is present in the garden either. Total number of zombies
-   and the initial stock is unspecified. *)
-val init_state: int -> int -> int -> int*int -> state
+   state. No sunlight is present in the garden either. *)
+val init_state: int -> int -> int -> int*int -> int -> state
 
+(*TODO*)
 (* Returns the number of sunlight. *)
-val get_sunlight: state -> int
+(*val get_sunlight: state -> int
 
 (* Update all the objects on every tile by one move *)
 val update: state -> unit
 
 (* Returns the objects in the state *)
-val get_objects: state -> objects
+val get_objects: state -> object list
 
 (* Returns the coordinates of the object *)
 val get_coordinates: item -> int*int
@@ -116,6 +102,4 @@ val zombie_attacked: zombie -> bool
 val zombie_attacking: zombie -> bool
 
 (* Returns the hp of the character. *)
-val get_hp: character -> int
-
-(*type stock = (flora * int) list*)
+  val get_hp: character -> int*)
