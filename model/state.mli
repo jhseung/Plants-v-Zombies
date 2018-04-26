@@ -4,23 +4,18 @@ open Object
    tiles    = tiles of the garden, containing the location and size of the tiles
               as well as the zombies, plants and projectiles present in the
               tile.
-   sunlights= sunlights present in the garden, containing the positions of
-              sunlights and number of time steps since they are created.
-   sun_bal  = balance of sunlights. (Sunlights are used by the program (not
-              player) to add plants to the stock. This is the remaining
-              sunlights that have not yet been used to add plants to the stock.)
+   sunlight = number of new sunlight.
    total    = total number of zombies to be released.
 *)
 type state = {
   top_left: int*int;
   tiles: (tile array) array;
+  size: int;
   mutable sunlight: int;
   mutable total: int;
 }
 
 type objects = |Zombie of zombie |Plant of plant |Projectile of projectile
-
-(* TODO: info corresponding to each species goes here *)
 
 type character = |Z of zombie |P of plant
 
@@ -34,6 +29,19 @@ type character = |Z of zombie |P of plant
    No plant, zombie or projectile is present on any of the tiles in the initial
    state. No sunlight is present in the garden either. *)
 val init_state: int -> int -> int -> int*int -> int -> state
+
+(* Updates the state with a new flora at coordinates (x, y)
+   If the corresponding tile has tile.plant != None then do nothing.
+   Requirs:
+   String [s] represents a valid flora type id
+   The (x, y) coordinats are within the boundary of the tiles array. *)
+val make_plant: string -> int * int -> state -> unit
+
+(* Updates the state with a new zombie at coordinates (x, y), state.total -= 1
+   Requirs:
+   String [s] represents a valid zombie type id
+   The (x, y) coordinats are within the boundary of the tiles array. *)
+val make_zombie: string -> int * int -> state -> unit
 
 (*TODO*)
 (* Returns the number of sunlight. *)
@@ -52,26 +60,12 @@ val get_coordinates: item -> int*int
 flora, type of projectile, as a string id. *)
 val get_type: item -> string
 
-(* Updates the state with a new flora at coordinates (x, y) *)
-val make_plant: f_species -> int * int -> state -> unit
-
-(* Updates the state with a new zombie at coordinates (x, y), state.total -= 1 *)
-val make_zombie: z_species -> int * int -> state -> unit
 
 (*[remove_plant (x,y) st] removes the flora at (x,y) from state [st] if
   it there is an object of type flora on the corresponding tile.*)
 val remove_plant: int * int -> state -> unit
 
-(*[remove_zombie m (x,y) st] removes the zombie [m] at (x,y) from state [st].*)
-(*val remove_zombie: mummy -> int * int -> state -> unit*)
-
-(* TODO: may not be exposed, will consider making projectiles with the
-   update function *)
-(* Updates the state with a projectile originating from the flora if there
-is a shooter object on the corresponding tile *)
-val make_projectile: int * int -> unit
-
-(* Chengyan: Let me decide where to put the sunlights.
+(*
 (* Updates the state with n additional sunlight, with
 n = number of sunflowers *)
 val sunflower_sunlight: state -> unit

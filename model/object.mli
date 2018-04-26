@@ -3,8 +3,15 @@
    speed is reduced to if hit by the projectile.
    full_growth represents the number of steps it take for the plant to unlock
    a certain capacity (e.g. producing sunlight) *)
-type info = {species: string; speed: int; hp: int; damage: int;
-             freeze: int option; full_growth: int option}
+type info =
+  {
+    species: string;
+    speed: int;
+    hp: int;
+    damage: int;
+    freeze: int;
+    full_growth: int
+  }
 
 (*type mummy = |Normal of info|Conehead of info|Buckethead of info*)
 
@@ -32,13 +39,24 @@ and zombie = {mummy: info; mutable z_pos: tile; mutable z_hp: int;
                  int represent the number of moves the freeze will last *)
               mutable is_eating: bool}
 
-and plant = {species: info; tile: tile; mutable p_hp: int;
-             mutable attacked: bool}
+and plant =
+  {
+    species: info;
+    tile: tile;
+    mutable p_hp: int;
+    mutable attacked: bool;
+    mutable growth: int
+  }
 
-and flora = |Shooter of plant |Sunflower of plant
 
-type item = |Zombie of zombie |Plant of plant
-            |Projectile of projectile
+and sunflower =  {p: plant; mutable sunlight: bool}
+
+and flora =
+  |Shooter of plant
+  |Sunflower of sunflower
+
+(*type item = |Zombie of zombie |Plant of plant
+            |Projectile of projectile*)
 
 
 (* Plants a type of flora on tile
@@ -57,3 +75,12 @@ val move_z: zombie -> unit
 
 (* [move_p z] updates p.tile to account for the movement of p *)
 val move_p: projectile -> unit
+
+(* [eat t] updates t to account for any collision between elements in t.zombies
+   and t.plant *)
+val eat: tile -> unit
+
+(* [grow p] increments the growth of p. If p has reached full growth, makes a
+   projectile if p is a shooter, sets p.sunlight to true if p is a sunflower,
+   which is set to false otherwise. *)
+val grow: flora -> unit
