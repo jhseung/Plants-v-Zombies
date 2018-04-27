@@ -66,12 +66,12 @@ val get_objects: state -> ob list
 (* Returns true if a zombie is at the leftmost tile and zombie.step >= tile.size *)
 val has_lost: state -> bool
 
+(* Returns the coordinates of type ob *)
+val get_coordinates: ob -> int*int
+
 (*TODO*)
 
-(*(* Returns the coordinates of the object *)
-val get_coordinates: item -> int*int
-
-
+(*
 
 (*[remove_plant (x,y) st] removes the flora at (x,y) from state [st] if
   it there is an object of type flora on the corresponding tile.*)

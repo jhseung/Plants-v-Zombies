@@ -101,7 +101,8 @@ let leftmost_z tile default =
     (fun default z -> if z.z_step < default.z_step then z else default)
     default tile.zombies
 
-(* Applied before move to check for collisions that could be missed when
+(* Assumes that crossing only occurs between adjacent tiles
+   Applied before move to check for collisions that could be missed when
    crossing the tile on the left
    Find rightmost projectile on l and leftmost projectile on r and if there are
    zombies between them then () else check and whether

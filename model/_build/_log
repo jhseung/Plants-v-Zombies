@@ -1,6 +1,6 @@
 ### Starting build.
 # Target: state.mli.depends, tags: { extension:mli, file:state.mli, ocaml, ocamldep, quiet }
-ocamlfind ocamldep -modules state.mli > state.mli.depends # cached
+ocamlfind ocamldep -modules state.mli > state.mli.depends
 # Target: object.mli.depends, tags: { extension:mli, file:object.mli, ocaml, ocamldep, quiet }
 ocamlfind ocamldep -modules object.mli > object.mli.depends
 # Target: object.cmi, tags: { byte, compile, extension:mli, file:object.mli, interf, ocaml, quiet }

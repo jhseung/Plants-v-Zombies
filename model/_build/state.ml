@@ -13,13 +13,6 @@ type ob =
   |Plant of plant
   |Projectile of projectile
 
-(*type objects =
-  {
-    zombies: zombie list;
-    plants: plant list;
-    projectiles: projectile list
-  }*)
-
 type character =
   |Z of zombie
   |P of flora
@@ -48,7 +41,7 @@ let init_state col row size (x_cord, y_cord) total =
   Array.iter (fun each_row ->
       Array.iteri (fun i cell ->
           if i > 0 then cell.left <- Some each_row.(i - 1)
-          else cell.tile_lost <- false;
+          else ();
           if i < col - 1 then cell.right <- Some each_row.(i + 1)
           else ())
         each_row) init_matrix;
@@ -100,7 +93,7 @@ let make_plant =
       freeze = 1;
       full_growth = 5
     } in
-let sunflower =
+  let sunflower =
   {
     species = "sunflower";
     speed = 0;
@@ -170,12 +163,33 @@ let get_type = function
   |Projectile p -> p.shooter.species
 
 let get_objects st =
-  Array.fold_left (fun acc_row row ->
-      Array.fold_left (fun acc cell ->
+  Array.fold_left (fun acc_row row -> acc_row@
+      (Array.fold_left (fun acc cell ->
           let plant = match cell.plant with
             |None -> []
             |Some (Shooter p) |Some (Sunflower {p = p; _}) -> [Plant p] in
           let zombies = List.map (fun z -> Zombie z) cell.zombies in
           let projectiles = List.map (fun p -> Projectile p) cell.projectiles in
           plant@zombies@projectiles@acc)
-        [] row) [] st.tiles
+         [] row)) [] st.tiles
+
+let has_lost st =
+  let b = ref false in
+  for i = 0 to Array.length st.tiles - 1 do
+    b := !b || st.tiles.(i).(0).tile_lost;
+  done;
+  !b
+
+let get_coordinates = function
+  |Zombie z ->
+    let x = z.z_pos.x + z.z_step in
+    let y = z.z_pos.y + z.z_pos.size/2 in
+    (x, y)
+  |Plant p ->
+    let x = p.tile.x + p.tile.size/2 in
+    let y = p.tile.y + p.tile.size/2 in
+    (x, y)
+  |Projectile p ->
+    let x = p.p_pos.x + p.p_step in
+    let y = p.p_pos.y + p.p_pos.size/2 in
+    (x, y)

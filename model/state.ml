@@ -13,13 +13,6 @@ type ob =
   |Plant of plant
   |Projectile of projectile
 
-(*type objects =
-  {
-    zombies: zombie list;
-    plants: plant list;
-    projectiles: projectile list
-  }*)
-
 type character =
   |Z of zombie
   |P of flora
@@ -100,7 +93,7 @@ let make_plant =
       freeze = 1;
       full_growth = 5
     } in
-let sunflower =
+  let sunflower =
   {
     species = "sunflower";
     speed = 0;
@@ -186,3 +179,17 @@ let has_lost st =
     b := !b || st.tiles.(i).(0).tile_lost;
   done;
   !b
+
+let get_coordinates = function
+  |Zombie z ->
+    let x = z.z_pos.x + z.z_step in
+    let y = z.z_pos.y + z.z_pos.size/2 in
+    (x, y)
+  |Plant p ->
+    let x = p.tile.x + p.tile.size/2 in
+    let y = p.tile.y + p.tile.size/2 in
+    (x, y)
+  |Projectile p ->
+    let x = p.p_pos.x + p.p_step in
+    let y = p.p_pos.y + p.p_pos.size/2 in
+    (x, y)
