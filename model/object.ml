@@ -29,7 +29,7 @@ type tile =
     mutable left: tile option;
     mutable right: tile option;
     mutable projectiles: projectile list;
-    mutable tile_lost: bool option
+    mutable tile_lost: bool
   }
 
 (*p_step initialized as 0 i.e. the left side of the tile *)
@@ -165,7 +165,7 @@ let move_z z = z.hit <- false;
   if next_step >= 0 then z.z_step <- next_step
   else remove_z t z;
   match t.left with
-  |None -> t.tile_lost <- Some true
+  |None -> t.tile_lost <- true
   |Some l ->
     z.z_pos <- l;
     z.z_step <- next_step mod t.size;

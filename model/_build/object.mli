@@ -25,7 +25,7 @@ type info =
    zombie has crossed the tile. *)
 type tile = {x: int; y: int; size: int; mutable zombies: zombie list;
              mutable plant: flora option; mutable left: tile option; mutable right: tile option;
-             mutable projectiles: projectile list; mutable tile_lost: bool option}
+             mutable projectiles: projectile list; mutable tile_lost: bool}
 
 (*p_step initialized as 0 i.e. the left side of the tile *)
 and projectile = {shooter: info; mutable p_pos: tile; mutable p_step: int}

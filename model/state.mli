@@ -15,9 +15,16 @@ type state = {
   mutable total: int;
 }
 
-type objects = |Zombie of zombie |Plant of plant |Projectile of projectile
+type ob = |Zombie of zombie |Plant of plant |Projectile of projectile
 
-type character = |Z of zombie |P of plant
+(*type objects =
+  {
+    zombies: zombie list;
+    plants: plant list;
+    projectiles: projectile list
+  }*)
+
+type character = |Z of zombie |P of flora
 
 
 (*position of sunlight and number of time steps since created*)
@@ -43,22 +50,27 @@ val make_plant: string -> int * int -> state -> unit
    The (x, y) coordinats are within the boundary of the tiles array. *)
 val make_zombie: string -> int * int -> state -> unit
 
-(*TODO*)
-(* Returns the number of sunlight. *)
-(*val get_sunlight: state -> int
-
 (* Update all the objects on every tile by one move *)
 val update: state -> unit
 
-(* Returns the objects in the state *)
-val get_objects: state -> object list
+(* Returns the number of new sunlight produced by the state [st]. *)
+val get_sunlight: state -> int
 
-(* Returns the coordinates of the object *)
+(* Returns the type of the ob, i.e. type of mummy, type of
+   flora, type of projectile, as a string id. *)
+val get_type: ob -> string
+
+(* Returns the all typd ob in state [st] *)
+val get_objects: state -> ob list
+
+(* Returns true if a zombie is at the leftmost tile and zombie.step >= tile.size *)
+val has_lost: state -> bool
+
+(*TODO*)
+
+(*(* Returns the coordinates of the object *)
 val get_coordinates: item -> int*int
 
-(* Returns the type of the object, i.e. type of mummy, type of
-flora, type of projectile, as a string id. *)
-val get_type: item -> string
 
 
 (*[remove_plant (x,y) st] removes the flora at (x,y) from state [st] if
@@ -81,10 +93,6 @@ val add_sunlight: sunlight list -> state -> unit
 
 (* Returns true if total = 0 and List.length objects.zombies = 0*)
 val has_won: state -> bool
-
-(* Checks for leftmost tiles only *)
-(* Returns true if a zombie is at the leftmost tile and zombie.step >= tile.size *)
-val has_lost: state -> bool
 
 (* Returns true if the plant is being attacked. *)
 val plant_attacked: plant -> bool

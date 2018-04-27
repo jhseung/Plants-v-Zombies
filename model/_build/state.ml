@@ -8,14 +8,21 @@ type state = {
   mutable total: int;
 }
 
-type objects =
+type ob =
   |Zombie of zombie
   |Plant of plant
   |Projectile of projectile
 
+(*type objects =
+  {
+    zombies: zombie list;
+    plants: plant list;
+    projectiles: projectile list
+  }*)
+
 type character =
   |Z of zombie
-  |P of plant
+  |P of flora
 
 (* Applies function f to each element of the matrix *)
 let iter_matrix f tiles =
@@ -35,23 +42,23 @@ let init_state col row size (x_cord, y_cord) total =
         left = None;
         right = None;
         projectiles = [];
-        tile_lost = None
+        tile_lost = false
       }) in
   let init_matrix = Array.init row (fun i -> init_row i) in
   Array.iter (fun each_row ->
       Array.iteri (fun i cell ->
           if i > 0 then cell.left <- Some each_row.(i - 1)
-          else cell.tile_lost <- Some false;
+          else cell.tile_lost <- false;
           if i < col - 1 then cell.right <- Some each_row.(i + 1)
           else ())
         each_row) init_matrix;
-{
-  top_left = (x_cord, y_cord);
-  tiles = init_matrix;
-  size = size;
-  sunlight = 0;
-  total = total
-}
+  {
+    top_left = (x_cord, y_cord);
+    tiles = init_matrix;
+    size = size;
+    sunlight = 0;
+    total = total
+  }
 
 let update_tiles tiles =
   iter_matrix (fun cell -> hit_before_crossing cell) tiles;
@@ -93,21 +100,40 @@ let make_plant =
       freeze = 1;
       full_growth = 5
     } in
+let sunflower =
+  {
+    species = "sunflower";
+    speed = 0;
+    hp = 5;
+    damage = 0;
+    freeze = 0;
+    full_growth = 10
+  } in
   fun id (x, y) st ->
     let t = get_tile (x, y) st in
     match t.plant with
     |Some _ -> ()
     |_ ->
-      if id = "peashooter" then
+      if id = "peashooter" then let species = peashooter in
         let p =
           {
-            species = peashooter;
+            species = species;
             tile = t;
-            p_hp = peashooter.hp;
+            p_hp = species.hp;
             attacked = false;
             growth = 0
           } in
         t.plant <- Some (Shooter p)
+      else if id = "sunflower" then
+        let p =
+          {
+            species = sunflower;
+            tile = t;
+            p_hp = sunflower.hp;
+            attacked = false;
+            growth = 0
+          } in
+        t.plant <- Some (Sunflower {p = p; sunlight = false})
       else ()
 
 let make_zombie =
@@ -122,10 +148,10 @@ let make_zombie =
     } in
   fun id (x, y) st ->
     let t = get_tile (x, y) st in
-    if id = "ocaml" then
+    if id = "ocaml" then let species = ocaml in
       let z =
         {
-          mummy = ocaml;
+          mummy = species;
           z_pos = t;
           z_hp = ocaml.hp;
           z_step = x - t.x;
@@ -135,3 +161,21 @@ let make_zombie =
       t.zombies <- z::t.zombies;
       st.total <- st.total - 1
     else ()
+
+let get_sunlight st = st.sunlight
+
+let get_type = function
+  |Zombie z -> z.mummy.species
+  |Plant p -> p.species.species
+  |Projectile p -> p.shooter.species
+
+let get_objects st =
+  Array.fold_left (fun acc_row row ->
+      Array.fold_left (fun acc cell ->
+          let plant = match cell.plant with
+            |None -> []
+            |Some (Shooter p) |Some (Sunflower {p = p; _}) -> [Plant p] in
+          let zombies = List.map (fun z -> Zombie z) cell.zombies in
+          let projectiles = List.map (fun p -> Projectile p) cell.projectiles in
+          plant@zombies@projectiles@acc)
+        [] row) [] st.tiles
