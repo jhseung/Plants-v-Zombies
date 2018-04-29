@@ -44,9 +44,6 @@ let init_mega c r size (x, y) total =
     st = init_state c r size (x, y) total
   }
 
-(*[tile_of_coord (x, y) m] returns [Some (c,r)] if (x,y) is a coordinate
-  contained in the tile at column [c] and row [r] in the mega state [m] and
-  [None] if (x,y) is not contained in any tile.*)
 let tile_of_coord (x, y) m =
   let (x0,y0) = (m.st).top_left in
   let c = (x - x0) / (m.st).size in
@@ -54,10 +51,6 @@ let tile_of_coord (x, y) m =
   if c >= 0 && c < m.col && r >=0 && r < m.row then Some (c, r)
   else None
 
-(*[sunlight_of_tile (c, r) m] returns [Some age] if there is sunlight in the
-  tile at column [c] and row [r] in the mega state [m] and the sunlight has been
-  there for [age] steps. It returns [None] if there is no sunlight in that tile.
-*)
 let sunlight_of_tile (c, r) m = m.sun.(c).(r)
 
 (*[change_sun_bal amount m] is the mega state after the sun balance of mega
@@ -206,10 +199,12 @@ let add_to_stock m =
   {m with sun_bal = bal; stock = stk}
 
 let plant_a_flora f (x,y) m =
-  make_plant f (x,y) m.st;
-  let stk = m.stock in
-  {m with stock = change_stock f (-1) stk}
-  |> select_flora_in_stock f false
+  if make_plant f (x,y) m.st then
+    let stk = m.stock in
+    let m' = {m with stock = change_stock f (-1) stk}
+             |> select_flora_in_stock f false in
+    (true, m')
+  else (false, m)
 
 (*[distinct_rand max_num r lst] is a list of distinct random numbers in 0, 1,
   ..., r-1, with the length of the list also random but not greater than
@@ -240,4 +235,3 @@ let update_mega =
     | 1 -> shed_sunlight m'
     | 5 -> counter := 0; m'
     | _ -> m'
-     
