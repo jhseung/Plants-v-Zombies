@@ -1,4 +1,3 @@
-open Object
 open Mega
 
 (*place holder for now*)
@@ -17,7 +16,7 @@ val player_move : handle -> mega
 (*[available_in_stock f st] is true if the plant [f] clicked in the stock panel
   is available in mega state [st] and false otherwise.
   side effects: If true it makes the plant appears selected. *)
-val available_in_stock : flora -> mega -> bool
+(*val available_in_stock : flora_t -> mega -> bool*)
 
 (*[plant_a_flora f t st] is the mega state [st'] after the mouse clicks the
   flora [f] in stock and then the tile [t] in mega state [st]. If no zombie is
@@ -25,20 +24,19 @@ val available_in_stock : flora -> mega -> bool
   that is the same as [f] is fewer in [st'] than [st] by 1. If a zombie is on
   tile [t], then [st'] is [st].
   requires : [available_in_stock f st] is true.
-  side effects : if no zombie is on tile [t], [f] is planted on [t] on the
-                 screen;
-                 if no zombie is on tile [t] and [f] was the only available
-                 flora of its type in the stock, then make its type appear grey
-                 in the stock panel on the screen.
+  side effects : if [f] was the only available flora of its type in the stock,
+                 then make its type appear grey in the stock panel on the screen.
 *)
-val plant_a_flora : flora -> tile -> mega -> mega
+(*val plant_a_flora : flora_t -> tile -> mega -> mega*)
 
-(*[collect_sunlight s st] is the mega state [st'] after the mouse clicks the
-  sunlight [s] in mega state [st]. Sunlight balance is incremented by an
-  unspecified value from [st] to [st'].
-  side effects: [s] is eliminated on the screen.
+(*[collect_sunlight (x,y) st] is the mega state [st'] after the mouse clicks
+  (x,y) and there is sunlight in the tile that contains (x,y) in mega state
+  [st]. Sunlight balance is incremented by an unspecified value from [st] to
+  [st'].
+  side effects: the sunlight in the tile that contains (x,y) is eliminated on
+  the screen.
 *)
-val collect_sunlight : sunlight -> mega -> mega
+(*val collect_sunlight : int*int -> mega -> mega *)
 
 (*respond to an elapse of time (i.e. do in every time step):
   put sunlight in the garden according to the number of sunflowers present in
@@ -63,28 +61,16 @@ val collect_sunlight : sunlight -> mega -> mega
   equals the number of sunflowers present in the garden in [st].
   side effects: create sunlights on the screen.
 *)
-val shed_sunlight : mega -> mega
+(*val shed_sunlight : mega -> mega*)
 
-(*[dissipate_sunlight st] increases the age of each sunlight in [st] by 1 and
-  remove the sunlights older than an unspecified age, and returns the new mega
-  state.
-  side effects: remove the corresponding sunlights on the screen.
-*)
-val dissipate_sunlight : mega -> mega
 
-(*[add_to_stock st] adds unspecified types and number of flora to the stock in
-  [st] and decreases the sunlight balance accordingly to return the new mega
-  state.
-  side effects: if a flora of a type previously unavailable is added to the
-                stock, then make its type colored in the stock panel.*)
-val add_to_stock : mega -> mega
 
-(*[add_zombie st] decides whether to let more zombies enter the garden and from
+(*[add_zombie m] decides whether to let more zombies enter the garden and from
   which lane(s) they enter, and if yes then adds the zombie(s) on the right edge
-  of the garden and returns the new mega state, otherwise returns [st].
-  side effects: create the added zombie(s) on the screen.*)
-val add_zombie : mega -> mega
+  of the garden and returns the new mega state, otherwise returns [m].*)
+(*val add_zombie : mega -> mega *)
 
+    (*
 (*[zombie_walk st] updates the positions of each zombie according to its
   velocity and whether it collides with a plant, after one time step from [st],
   and returns the new mega state.
@@ -114,7 +100,7 @@ val kill_flora : mega -> mega
   side effects: remove the corresponding zombie on the screen.
 *)
 val kill_zombie : mega -> mega
-
+*)
 (*[check_lost st] is true if a zombie has reached the house in mega state [st].
   side effects: if a zombie has reached the house then print the message telling
                 the player he has lost on the screen.*)
