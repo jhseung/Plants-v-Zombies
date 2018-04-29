@@ -41,8 +41,10 @@ val init_state: int -> int -> int -> int*int -> int -> state
    If the corresponding tile has tile.plant != None then do nothing.
    Requirs:
    String [s] represents a valid flora type id
-   The (x, y) coordinats are within the boundary of the tiles array. *)
-val make_plant: string -> int * int -> state -> unit
+   The (x, y) coordinats are within the boundary of the tiles array.
+   Returns true if the plant has been planted, false otherwise (a plant
+   is already on the tile or there are zombies on the tile)*)
+val make_plant: string -> int * int -> state -> bool
 
 (* Updates the state with a new zombie at coordinates (x, y), state.total -= 1
    Requirs:
