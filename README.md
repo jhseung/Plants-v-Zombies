@@ -8,7 +8,7 @@ Lorem ipsum
 This projects uses js_of_ocaml to compile the code. 
 
 Run 
-`opam install js_of_ocaml js_of_ocaml-ppx js_of_ocaml-lwt` prior to running `Make`.
+`opam install js_of_ocaml js_of_ocaml-ocamlbuild js_of_ocaml-camlp4 js_of_ocaml-lwt` prior to running `Make`.
 
 
 
