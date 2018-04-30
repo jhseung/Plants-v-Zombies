@@ -71,6 +71,9 @@ val has_lost: state -> bool
 (* Returns the coordinates of type ob *)
 val get_coordinates: ob -> int*int
 
+(* Returns true if total = 0 and List.length objects.zombies = 0*)
+val has_won: state -> bool
+
 (*TODO*)
 
 (*
@@ -78,23 +81,6 @@ val get_coordinates: ob -> int*int
 (*[remove_plant (x,y) st] removes the flora at (x,y) from state [st] if
   it there is an object of type flora on the corresponding tile.*)
 val remove_plant: int * int -> state -> unit
-
-(*
-(* Updates the state with n additional sunlight, with
-n = number of sunflowers *)
-val sunflower_sunlight: state -> unit
-
-(* Updates the state with 1 additional sunlight *)
-val increase_sunlight: state -> unit
-*)
-
-(*[add_sunlight lst st] adds the sunlights specified by the list [lst] to the
-  existing sunlights in state [st] and increases the sunlight balance by the
-  number of added sunlights.*)
-val add_sunlight: sunlight list -> state -> unit
-
-(* Returns true if total = 0 and List.length objects.zombies = 0*)
-val has_won: state -> bool
 
 (* Returns true if the plant is being attacked. *)
 val plant_attacked: plant -> bool
