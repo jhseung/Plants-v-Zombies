@@ -1,4 +1,5 @@
 open State
+open Sprite
 
 type flora_t = string
 type zombie_t = string
@@ -27,7 +28,8 @@ type mega = {
   sun_bal : int;
   num_tiles_wout_sun : int;
   stock : (flora_t * bool * int) list;
-  st : state
+  st : state;
+  sprite_list: sprite list;
 }
 
 (* [init_mega c r s (x,y) total] is the initial mega state with number of
