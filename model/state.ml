@@ -105,8 +105,8 @@ let make_plant =
   fun id (x, y) st ->
     let t = get_tile (x, y) st in
     match t.plant with
-    |Some _ -> ()
-    |_ ->
+    |Some _ -> false
+    |_ -> match t.zombies with |_::_ -> false |_ -> 
       if id = "peashooter" then let species = peashooter in
         let p =
           {
@@ -116,7 +116,7 @@ let make_plant =
             attacked = false;
             growth = 0
           } in
-        t.plant <- Some (Shooter p)
+        t.plant <- Some (Shooter p); true
       else if id = "sunflower" then
         let p =
           {
@@ -126,8 +126,8 @@ let make_plant =
             attacked = false;
             growth = 0
           } in
-        t.plant <- Some (Sunflower {p = p; sunlight = false})
-      else ()
+        t.plant <- Some (Sunflower {p = p; sunlight = false}); true
+      else false
 
 let make_zombie =
   let ocaml =
