@@ -1,4 +1,5 @@
 build:
+	ocamlbuild -Is model -use-ocamlfind control.cmo mega.cmo
 	ocamlbuild -use-ocamlfind \
 		-plugin-tag "package(js_of_ocaml.ocamlbuild)" \
 		-no-links \
