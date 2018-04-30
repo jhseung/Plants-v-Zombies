@@ -59,7 +59,10 @@ val update: state -> unit
 val get_sunlight: state -> int
 
 (* Returns the type of the ob, i.e. type of mummy, type of
-   flora, type of projectile, as a string id. *)
+   flora, type of projectile, as a string id. 
+   "peashooter" for peashooter
+   "sunflower" for sunflower
+   "ocaml" for zombie *)
 val get_type: ob -> string
 
 (* Returns the all typd ob in state [st] *)
