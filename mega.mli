@@ -1,4 +1,4 @@
-open State
+open model/State
 
 type flora_t = string
 type zombie_t = string
