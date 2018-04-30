@@ -3,12 +3,32 @@ open State
 type flora_t = string
 type zombie_t = string
 
-(*[st] is the state of the garden (zombies, plants and etc., specified by
-  state.mli).
-  [stock] = [p1,n1; p2,n2; ...] meaning in the stock there are n1 flora of
-             type p1, n2 flora of type p2 ...
+(*type that includes all the information of the status of the game, referred to
+  as the mega state.
+  col = number of columns of tiles.
+  row = number of rows of tiles.
+  sun = a 2D array whose entry corresponds to each tile, [sun.(c).(r)] is [None]
+        if there is no sunlight in the tile at column [c] and row [r] and it is
+        [Some age] if there is sunlight in that tile and it has been there for
+        [age] steps.
+  sun_bal = sun balance, the amount of collected sunlight that has not been used
+            by the program to add flora to the stock.
+  num_tiles_wout_sun = number of tiles where there is no sunlight.
+  stock = list of flora in stock, the entry [(f, s, n)] of the list represents
+          that there are a number ([n]) of flora of type [f] in the stock, and
+          the flora of type [f] is selected by the player iff [s] is true.
+  st = the state of the garden, i.e. positions and health points of flora and
+       zombies in the garden. See state.mli for more details.
 *)
-type mega
+type mega = {
+  col : int;
+  row : int;
+  sun : int option array array;
+  sun_bal : int;
+  num_tiles_wout_sun : int;
+  stock : (flora_t * bool * int) list;
+  st : state
+}
 
 (* [init_mega c r s (x,y) total] is the initial mega state with number of
    columns [c], number of rows [r], tile size [s], and coordinates [(x, y)] for
