@@ -1,0 +1,46 @@
+### Starting build.
+# Target: control.mli.depends, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), extension:mli, file:control.mli, ocaml, ocamldep, quiet, traverse }
+ocamlfind ocamldep -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -modules control.mli > control.mli.depends # cached
+# Target: mega.mli.depends, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), extension:mli, file:mega.mli, ocaml, ocamldep, quiet, traverse }
+ocamlfind ocamldep -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -modules mega.mli > mega.mli.depends # cached
+# Target: model/state.mli.depends, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), extension:mli, file:model/state.mli, ocaml, ocamldep, quiet, traverse }
+ocamlfind ocamldep -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -modules model/state.mli > model/state.mli.depends # cached
+# Target: model/object.mli.depends, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), extension:mli, file:model/object.mli, ocaml, ocamldep, quiet, traverse }
+ocamlfind ocamldep -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -modules model/object.mli > model/object.mli.depends
+# Target: model/object.cmi, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), byte, compile, extension:mli, file:model/object.mli, interf, ocaml, quiet, traverse }
+ocamlfind ocamlc -c -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -I model -o model/object.cmi model/object.mli
+# Target: model/state.cmi, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), byte, compile, extension:mli, file:model/state.mli, interf, ocaml, quiet, traverse }
+ocamlfind ocamlc -c -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -I model -o model/state.cmi model/state.mli
+# Target: mega.cmi, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), byte, compile, extension:mli, file:mega.mli, interf, ocaml, quiet, traverse }
+ocamlfind ocamlc -c -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -I model -o mega.cmi mega.mli
+# Target: control.cmi, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), byte, compile, extension:mli, file:control.mli, interf, ocaml, quiet, traverse }
+ocamlfind ocamlc -c -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -I model -o control.cmi control.mli
+# Target: control.ml.depends, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), extension:ml, file:control.ml, ocaml, ocamldep, quiet, traverse }
+ocamlfind ocamldep -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -modules control.ml > control.ml.depends # cached
+# Target: control.cmo, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), byte, compile, extension:cmo, extension:ml, file:control.cmo, file:control.ml, implem, ocaml, quiet, traverse }
+ocamlfind ocamlc -c -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -I model -o control.cmo control.ml
+# Target: mega.ml.depends, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), extension:ml, file:mega.ml, ocaml, ocamldep, quiet, traverse }
+ocamlfind ocamldep -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -modules mega.ml > mega.ml.depends # cached
+# Target: mega.cmo, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), byte, compile, extension:cmo, extension:ml, file:mega.cmo, file:mega.ml, implem, ocaml, quiet, traverse }
+ocamlfind ocamlc -c -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -I model -o mega.cmo mega.ml
+# Target: main.ml.depends, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), extension:ml, file:main.ml, ocaml, ocamldep, quiet, traverse }
+ocamlfind ocamldep -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -modules main.ml > main.ml.depends # cached
+# Target: main.cmo, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), byte, compile, extension:cmo, extension:ml, file:main.cmo, file:main.ml, implem, ocaml, quiet, traverse }
+ocamlfind ocamlc -c -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -I model -o main.cmo main.ml
+# Target: main.d.cmo, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), byte, compile, debug, extension:cmo, extension:ml, file:main.d.cmo, file:main.ml, implem, ocaml, quiet, traverse }
+ocamlfind ocamlc -c -g -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -I model -o main.d.cmo main.ml
+# Target: model/object.ml.depends, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), extension:ml, file:model/object.ml, ocaml, ocamldep, quiet, traverse }
+ocamlfind ocamldep -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -modules model/object.ml > model/object.ml.depends # cached
+# Target: model/state.ml.depends, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), extension:ml, file:model/state.ml, ocaml, ocamldep, quiet, traverse }
+ocamlfind ocamldep -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -modules model/state.ml > model/state.ml.depends # cached
+# Target: mega.d.cmo, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), byte, compile, debug, extension:cmo, extension:ml, file:mega.d.cmo, file:mega.ml, implem, ocaml, quiet, traverse }
+ocamlfind ocamlc -c -g -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -I model -o mega.d.cmo mega.ml
+# Target: model/object.d.cmo, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), byte, compile, debug, extension:cmo, extension:ml, file:model/object.d.cmo, file:model/object.ml, implem, ocaml, quiet, traverse }
+ocamlfind ocamlc -c -g -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -I model -o model/object.d.cmo model/object.ml
+# Target: model/state.d.cmo, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), byte, compile, debug, extension:cmo, extension:ml, file:model/state.d.cmo, file:model/state.ml, implem, ocaml, quiet, traverse }
+ocamlfind ocamlc -c -g -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -I model -o model/state.d.cmo model/state.ml
+# Target: main.d.byte, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), byte, debug, dont_link_with, extension:byte, file:main.d.byte, link, ocaml, program, quiet, traverse }
+ocamlfind ocamlc -linkpkg -g -package js_of_ocaml -package js_of_ocaml-lwt -package js_of_ocaml.syntax -I model model/object.d.cmo model/state.d.cmo mega.d.cmo main.d.cmo -o main.d.byte
+# Target: main.d.js, tags: { package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), extension:js, file:main.d.js, js_of_ocaml, quiet, traverse }
+js_of_ocaml --no-runtime +js_of_ocaml-compiler/runtime.js -o main.d.js main.d.byte
+# Compilation successful.

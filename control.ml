@@ -1,5 +1,8 @@
 open Mega
 
+(*place holder for now*)
+type handle = unit
+
 (*type of the mouse click.
   [Cstart] represents a click on the start button.
   [Cgarden (x,y)] represents a click on coordinates [(x,y)].
@@ -9,7 +12,7 @@ type clicked = Cstart | Cgarden of int*int | Cstock of flora_t
 let play_game c r s (x,y) =
   failwith "Unimplemented"
 
-let player_move h =
+let player_move () =
   failwith "Unimplemented"
 
 (*[plant_flora_helper f (x,y) prev curr m] returns [prev',curr], where [f] is
@@ -71,7 +74,7 @@ let make_move prev curr m =
     else (prev, m)
   | (_, Cstock f2) ->
     if get_num_in_stock f2 m > 0 then
-      (curr, select_flora_in_stock f2 true)
+      (curr, select_flora_in_stock f2 true m)
     else (prev, m)
   | (Cstock f, Cgarden (x,y)) -> click_garden_after_stock f (x,y) prev curr m
   | (_, Cgarden (x,y)) -> click_garden (x,y) prev curr m

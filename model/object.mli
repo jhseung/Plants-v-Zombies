@@ -71,7 +71,7 @@ and flora =
 
 (* Plants a type of flora on tile
    requires: no zombie or flora is on the tile. *)
-val plant: flora -> tile -> unit
+val plant: flora option -> tile -> unit
 
 (* Moves the moving object from the current tile to the next tile *)
 (*val next_tile: moving -> unit*)

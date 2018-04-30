@@ -222,6 +222,7 @@ let rec distinct_rand max_num r lst =
   of the garden and returns the new mega state, otherwise returns [m].*)
 let add_zombie m =
   let (x0, y0) = m.st.top_left in
+  let size = m.st.size in
   let edge = x0 + m.st.size * m.col in
   let lst = distinct_rand (min m.row m.st.total) m.row [] in
   List.iter (fun r -> make_zombie "ocaml" (edge, r * size + size / 2) m.st) lst;

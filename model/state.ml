@@ -106,7 +106,7 @@ let make_plant =
     let t = get_tile (x, y) st in
     match t.plant with
     |Some _ -> false
-    |_ -> match t.zombies with |_::_ -> false |_ -> 
+    |_ -> match t.zombies with |_::_ -> false |_ ->
       if id = "peashooter" then let species = peashooter in
         let p =
           {
@@ -193,3 +193,10 @@ let get_coordinates = function
     let x = p.p_pos.x + p.p_step in
     let y = p.p_pos.y + p.p_pos.size/2 in
     (x, y)
+
+let has_won st =
+  st.total <= 0 &&
+  Array.for_all (fun row ->
+      Array.for_all (fun cell ->
+          match cell.zombies with |[] -> true |_ ->false)
+    row) st.tiles
