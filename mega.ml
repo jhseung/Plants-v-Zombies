@@ -31,7 +31,7 @@ type mega = {
   sun_bal : int;
   num_tiles_wout_sun : int;
   stock : (flora_t * bool * int) list;
-  st : state;
+  mutable st : state;
   sprite_list: sprite list;
 }
 
