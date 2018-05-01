@@ -2,12 +2,12 @@ open State
 
 (* Sprite record object containing information about each sprite item - plant, camel, projectile *)
 type sprite = {
-  coords: int*int; (* coordinates of sprite in context *)
+  coords: float*float; (* coordinates of sprite in context *)
   mutable current_frame: int; (* current sprite # *)
   mutable max_frame_count: int; (* total # of images in sprite *)
   reference: string; (* path to sprite *)
-  frame_size: int*int;
-  mutable offset: int*int; (* location of current frame image *)
+  frame_size: float*float;
+  mutable offset: float*float; (* location of current frame image in sprite*)
 }
 
 let to_sprite objtype size coords =
@@ -29,5 +29,5 @@ let to_sprite objtype size coords =
     max_frame_count = max_frame_count;
     reference = reference;
     frame_size = (size,size);
-    offset = (0,0);
+    offset = (0.,0.);
   }

@@ -1,1 +1,7 @@
+<<<<<<< HEAD
 true: package(js_of_ocaml), package(js_of_ocaml-lwt), package(js_of_ocaml.syntax), package(oUnit)
+=======
+true: package(js_of_ocaml), package(js_of_ocaml-lwt), package(oUnit), package(oUnit)
+true: syntax(camlp4o), package(js_of_ocaml.syntax)
+<main.d.js>:pretty
+>>>>>>> 1b3e8c9243cbf17b90f9a9281a79e26c156c7147
