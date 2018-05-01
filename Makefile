@@ -5,7 +5,7 @@ build:
 		main.d.js
 
 test:
-	ocamlbuild -use-ocamlfind test.byte && ./test.byte 
+	ocamlbuild -Is model -use-ocamlfind test_main.byte && ./test_main.byte 
 
 clean:
 	ocamlbuild -clean
