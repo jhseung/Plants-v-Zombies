@@ -5,6 +5,7 @@ type sprite = {
   coords: float*float; (* coordinates of sprite in context *)
   mutable current_frame: int; (* current sprite # *)
   mutable max_frame_count: int; (* total # of images in sprite *)
+  mutable count: int; (* count used to slow down animation speed *)
   reference: string; (* path to sprite *)
   frame_size: float*float;
   mutable offset: float*float; (* location of current frame image in sprite*)
@@ -30,4 +31,5 @@ let to_sprite objtype size coords =
     reference = reference;
     frame_size = (size,size);
     offset = (0.,0.);
+    count = 0;
   }

@@ -7,8 +7,8 @@ let js = Js.string
 let document = Html.document
 
 (* ARBITRARY FOR NOW *)
-let screen_width = 800.
-let screen_height = 500.
+let screen_width = 650.
+let screen_height = 350.
 
 let tile_offset_width = 100
 let tile_offset_height = 80
@@ -35,20 +35,55 @@ let (background : background_object list) = [
   }
 ]
 
+let sprite_list = [
+  {
+    coords=(100.,80.);
+    current_frame=1;
+    max_frame_count=24;
+    reference="sprites/peashooter.png";
+    frame_size=(52.,52.);
+    offset=(0.,0.);
+    count=0;
+  };
+  {
+    coords=(100.,130.);
+    current_frame=1;
+    max_frame_count=24;
+    reference="sprites/peashooter.png";
+    frame_size=(52.,52.);
+    offset=(0.,0.);
+    count=0;
+  }
+]
+
 (* [peashooter_sprite] updates the sprite field of a peashooter *)
 let update_peashooter_sprite (sprite:sprite) =
-  let curr = sprite.current_frame in
   let (x,y) = sprite.offset in
-  if sprite.max_frame_count >= sprite.current_frame then
-    if curr mod 5 <> 0 then
+  if sprite.max_frame_count > sprite.current_frame then
+    if sprite.current_frame mod 5 <> 0 then
     begin
-      sprite.offset <- (x+.52.,y);
+      if sprite.count mod 5 = 4 then
+      begin
+        sprite.offset <- (x+.52.,y);
+        sprite.current_frame <- sprite.current_frame + 1;
+        sprite.count <- 0;
+      end
+      else sprite.count <- sprite.count + 1;
     end
-    else begin sprite.offset <- (0.,y+.52.);
-    sprite.current_frame <- sprite.current_frame + 1;
-  end
+    else 
+    begin 
+      if sprite.count mod 5 = 4 then
+      begin
+        sprite.offset <- (0.,y+.53.2);
+        sprite.current_frame <- sprite.current_frame + 1;
+        sprite.count <- 0;
+      end
+      else
+      sprite.count <- sprite.count + 1;
+    end
   else begin
-    sprite.current_frame <- 0;
+    sprite.current_frame <- 1;
+    sprite.count <- 0;
     sprite.offset <- (0.,0.);
   end
 
@@ -143,9 +178,7 @@ let draw_constants (context: Html.canvasRenderingContext2D Js.t) =
 let clear_context (context: Html.canvasRenderingContext2D Js.t) = 
   context##clearRect (0., 0., screen_height, screen_width) |> ignore
 
-let render_constant (context:Html.canvasRenderingContext2D Js.t) mega = 
-  context |> draw_constants |> ignore
-
-let render_change (context: Html.canvasRenderingContext2D Js.t) mega =
-  clear_context context;
-  render_constant context mega;
+let render_page (context: Html.canvasRenderingContext2D Js.t) mega = 
+  (* clear_context context;  *)
+  context |> draw_constants |> ignore;
+  draw_sprites context sprite_list;
