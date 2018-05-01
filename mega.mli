@@ -57,7 +57,8 @@ val select_flora_in_stock : flora_t -> bool -> mega -> mega
   mega state [m], updates the stock, deselects the flora type in the stock panel
   and returns [(true, m')] where [m'] is the new state, if there is not already
   a plant or zombie on the tile that contains [(x,y)]. It does nothing and
-  returns [(false, m)] if there is already a plant or zombie on that tile.*)
+  returns [(false, m)] if there is already a plant or zombie on that tile.
+  requires: the flora of type [f] is available in the stock of [m].*)
 val plant_a_flora : flora_t -> int*int -> mega -> bool * mega
 
 (*[sunlight_of_tile (c, r) m] returns [Some age] if there is sunlight in the
