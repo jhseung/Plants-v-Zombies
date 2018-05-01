@@ -1,2 +1,4 @@
 B _build
 B _build/model
+PKG oUnit
+PKG js_of_ocaml

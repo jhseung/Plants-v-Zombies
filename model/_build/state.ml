@@ -116,7 +116,7 @@ let make_plant =
             attacked = false;
             growth = 0
           } in
-        plant (Shooter p) t; true
+        plant (Some (Shooter p)) t; true
       else if id = "sunflower" then
         let p =
           {

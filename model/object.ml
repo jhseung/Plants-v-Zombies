@@ -1,6 +1,6 @@
 (* TODO: freeze
    TODO: chagen steps to floats\
-   TODO: speed up 
+   TODO: speed up
    TODO: make projectile & shooter growth
    TODO: dead: (object*int) list
    TODO: growth: int: growth + 1 mod full and add sunlight if = full - 1*)
@@ -76,7 +76,7 @@ and flora =
 (*type item = |Zombie of zombie |Plant of plant
               |Projectile of projectile*)
 
-let plant f t = t.plant <- Some f
+let plant f t = t.plant <- f
 
 (* Updates the tile after removing zombie z from t.zombies *)
 let remove_z t z =

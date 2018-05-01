@@ -1,4 +1,5 @@
 open State
+open Sprite
 
 (*name of flora type : peashooter, sunflower*)
 type flora_t = string
@@ -30,7 +31,8 @@ type mega = {
   sun_bal : int;
   num_tiles_wout_sun : int;
   stock : (flora_t * bool * int) list;
-  st : state
+  mutable st : state;
+  sprite_list: sprite list;
 }
 
 let init_mega c r size (x, y) total =
@@ -40,8 +42,9 @@ let init_mega c r size (x, y) total =
     sun = Array.make_matrix c r None;
     sun_bal = 0;
     num_tiles_wout_sun = c * r;
-    stock = ["sunflower", false, 1];
-    st = init_state c r size (x, y) total
+    stock = ["sunflower", false, 1; "peashooter", false, 0];
+    st = init_state c r size (x, y) total;
+    sprite_list = [];
   }
 
 let tile_of_coord (x, y) m =
