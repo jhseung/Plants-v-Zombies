@@ -30,7 +30,7 @@ type character = |Z of zombie |P of flora
 (*position of sunlight and number of time steps since created*)
 (*type sunlight = {pos : int*int; age : int}*)
 
-(* [init_state c r s (x,y) total] is the initial state with number of columns [c],
+(* [init_state r c s (x,y) total] is the initial state with number of columns [c],
    number of rows [r], tile size [s], and coordinates [(x, y)] for top left
    corner, [total] the total number of zombies to be released.
    No plant, zombie or projectile is present on any of the tiles in the initial
@@ -62,17 +62,19 @@ val get_sunlight: state -> int
    flora, type of projectile, as a string id. *)
 val get_type: ob -> string
 
-(* Returns the all typd ob in state [st] *)
+(* Returns all type ob in state [st] *)
 val get_objects: state -> ob list
 
-(* Returns true if a zombie is at the leftmost tile and zombie.step >= tile.size *)
+(* Returns true if a zombie has crossed a leftmost tile *)
 val has_lost: state -> bool
 
 (* Returns the coordinates of type ob *)
 val get_coordinates: ob -> int*int
 
-(* Returns true if total = 0 and List.length objects.zombies = 0*)
+(* Returns true if total = 0 and there are no zombie on any tile *)
 val has_won: state -> bool
+
+val get_tile: int*int -> state -> tile
 
 (*TODO*)
 

@@ -24,7 +24,7 @@ let iter_matrix f tiles =
           f cell)
     row) tiles
 
-let init_state col row size (x_cord, y_cord) total =
+let init_state row col size (x_cord, y_cord) total =
   let rec init_row row_n = Array.init col (fun i ->
       {
         x = x_cord + i*size;
@@ -81,7 +81,7 @@ let update st =
 let get_tile (x, y) st =
   let col = (x - (fst st.top_left))/st.size in
   let row = (y - (snd st.top_left))/st.size in
-  st.tiles.(col).(row)
+  st.tiles.(row).(col)
 
 let make_plant =
   let peashooter =
@@ -106,7 +106,7 @@ let make_plant =
     let t = get_tile (x, y) st in
     match t.plant with
     |Some _ -> false
-    |_ -> match t.zombies with |_::_ -> false |_ -> 
+    |_ -> match t.zombies with |_::_ -> false |_ ->
       if id = "peashooter" then let species = peashooter in
         let p =
           {
@@ -116,7 +116,7 @@ let make_plant =
             attacked = false;
             growth = 0
           } in
-        t.plant <- Some (Shooter p); true
+        plant (Shooter p) t; true
       else if id = "sunflower" then
         let p =
           {
@@ -193,3 +193,10 @@ let get_coordinates = function
     let x = p.p_pos.x + p.p_step in
     let y = p.p_pos.y + p.p_pos.size/2 in
     (x, y)
+
+let has_won st =
+  st.total <= 0 && not (has_lost st) &&
+  Array.for_all (fun row ->
+      Array.for_all (fun cell ->
+          match cell.zombies with |[] -> true |_ ->false)
+    row) st.tiles
