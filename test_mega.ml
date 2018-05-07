@@ -12,7 +12,7 @@ let tests =
   let initial_m_copy = initial_m in
   let sunflower_planted_m = plant_a_flora "sunflower" (2,3) initial_m_copy
                             |> snd in
-  (*let updated_m_1 = update_mega sunflower_planted_m in *)
+  let updated_m_1 = update_mega sunflower_planted_m in
 [
   "peashooter in initial stock" >::
   (fun _ -> assert_equal 0 (get_num_in_stock "peashooter" initial_m));
@@ -38,8 +38,8 @@ let tests =
 
   "sunflower deselected after planted from initial stock" >::
   (fun _ -> assert_equal false (get_selected "sunflower" sunflower_planted_m));
-  (*
-  "number of tiles without sun after updating the field with one sunflower by"^
-  "one step" >::
-  (fun _ -> assert_equal 5 updated_m_1.num_tiles_wout_sun);*)
+
+  (*  "number of tiles without sun after updating the field with one sunflower by"^
+  " one step" >::
+      (fun _ -> assert_equal 5 updated_m_1.num_tiles_wout_sun);*)
 ]
