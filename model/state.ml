@@ -200,3 +200,12 @@ let has_won st =
       Array.for_all (fun cell ->
           match cell.zombies with |[] -> true |_ ->false)
     row) st.tiles
+
+let print_state st =
+Array.iteri (fun i row ->
+    Array.iteri (fun j cell ->
+          print_endline ("tile: "^(string_of_int i)^", "^(string_of_int j));
+          print_tile cell)
+      row) st.tiles;
+print_endline ("sunlight: "^(string_of_int st.sunlight));
+print_endline ("total: "^(string_of_int st.total))

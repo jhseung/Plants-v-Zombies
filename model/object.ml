@@ -206,3 +206,43 @@ let grow p =
     s.p.growth <- s.p.growth + 1 mod s.p.species.full_growth;
     if s.p.growth = 0 then s.sunlight <- true
     else s.sunlight <- false
+
+let print_coordinates t =
+  print_endline ("(x, y): "^(string_of_int t.x)^", "^(string_of_int t.y))
+
+let print_plant p =
+  print_endline ("species: "^(p.species.species));
+  print_coordinates p.tile;
+  print_endline ("hp: "^(string_of_int p.p_hp));
+  print_endline ("being attacked: "^(string_of_bool p.attacked));
+  print_endline ("growth: "^(string_of_int p.growth))
+
+let print_zombie z =
+  print_endline ("species: "^(z.mummy.species));
+  print_coordinates z.z_pos;
+  print_endline ("hp: "^(string_of_int z.z_hp));
+  print_endline ("step: "^(string_of_int z.z_step));
+  print_endline ("being hit: "^(string_of_bool z.hit));
+  print_endline ("is eating: "^(string_of_bool z.is_eating))
+
+let print_projectile p =
+  print_endline ("species: "^(p.shooter.species));
+  print_coordinates p.p_pos;
+  print_endline ("step: "^(string_of_int p.p_step))
+
+let print_tile t =
+  print_coordinates t;
+  List.iter (fun z -> print_zombie z; print_endline "") t.zombies;
+  match t.plant with
+  |Some (Shooter p) -> print_plant p;
+  |Some (Sunflower {p = p; sunlight = b})
+    -> print_plant p; print_endline (string_of_bool b);
+  |_ -> ();
+  match t.left with
+  |Some l -> print_string "left tile: ";print_coordinates l;
+  |_ -> ();
+  match t.right with
+  |Some r -> print_string "right tile: ";print_coordinates r;
+  |_ -> ();
+    List.iter (fun p -> print_projectile p) t.projectiles;
+    print_endline ("tile is lost: "^(string_of_bool t.tile_lost))

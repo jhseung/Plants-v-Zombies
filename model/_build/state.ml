@@ -200,3 +200,6 @@ let has_won st =
       Array.for_all (fun cell ->
           match cell.zombies with |[] -> true |_ ->false)
     row) st.tiles
+
+let print_state st = ()
+    (* Array.iteri *)

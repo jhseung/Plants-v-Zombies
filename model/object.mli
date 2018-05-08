@@ -94,3 +94,5 @@ val eat: tile -> unit
    projectile if p is a shooter, sets p.sunlight to true if p is a sunflower,
    which is set to false otherwise. *)
 val grow: flora -> unit
+
+val print_tile: tile -> unit

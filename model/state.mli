@@ -79,6 +79,8 @@ val has_won: state -> bool
 
 val get_tile: int*int -> state -> tile
 
+val print_state: state -> unit
+
 (*TODO*)
 
 (*
