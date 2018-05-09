@@ -1,18 +1,18 @@
 ### Starting build.
 # Target: object.mli.depends, tags: { package(oUnit), extension:mli, file:object.mli, ocaml, ocamldep, quiet, traverse }
-ocamlfind ocamldep -package oUnit -modules object.mli > object.mli.depends # cached
+ocamlfind ocamldep -package oUnit -modules object.mli > object.mli.depends
 # Target: object.cmi, tags: { package(oUnit), byte, compile, extension:mli, file:object.mli, interf, ocaml, quiet, traverse }
-ocamlfind ocamlc -c -package oUnit -o object.cmi object.mli # cached
+ocamlfind ocamlc -c -package oUnit -o object.cmi object.mli
 # Target: object.ml.depends, tags: { package(oUnit), extension:ml, file:object.ml, ocaml, ocamldep, quiet, traverse }
 ocamlfind ocamldep -package oUnit -modules object.ml > object.ml.depends
 # Target: object.cmo, tags: { package(oUnit), byte, compile, extension:cmo, extension:ml, file:object.cmo, file:object.ml, implem, ocaml, quiet, traverse }
 ocamlfind ocamlc -c -package oUnit -o object.cmo object.ml
 # Target: state.mli.depends, tags: { package(oUnit), extension:mli, file:state.mli, ocaml, ocamldep, quiet, traverse }
-ocamlfind ocamldep -package oUnit -modules state.mli > state.mli.depends # cached
+ocamlfind ocamldep -package oUnit -modules state.mli > state.mli.depends
 # Target: state.cmi, tags: { package(oUnit), byte, compile, extension:mli, file:state.mli, interf, ocaml, quiet, traverse }
-ocamlfind ocamlc -c -package oUnit -o state.cmi state.mli # cached
+ocamlfind ocamlc -c -package oUnit -o state.cmi state.mli
 # Target: state.ml.depends, tags: { package(oUnit), extension:ml, file:state.ml, ocaml, ocamldep, quiet, traverse }
-ocamlfind ocamldep -package oUnit -modules state.ml > state.ml.depends # cached
+ocamlfind ocamldep -package oUnit -modules state.ml > state.ml.depends
 # Target: state.cmo, tags: { package(oUnit), byte, compile, extension:cmo, extension:ml, file:state.cmo, file:state.ml, implem, ocaml, quiet, traverse }
-ocamlfind ocamlc -c -package oUnit -o state.cmo state.ml # cached
+ocamlfind ocamlc -c -package oUnit -o state.cmo state.ml
 # Compilation successful.

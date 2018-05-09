@@ -103,6 +103,13 @@ let make_plant =
     full_growth = 10
   } in
   fun id (x, y) st ->
+    print_endline ("x: "^(string_of_int ((Array.length st.tiles.(0))*st.size)));
+    print_endline ("y: "^(string_of_int ((Array.length st.tiles)*st.size)));
+    let max_x = fst st.top_left + (Array.length st.tiles.(0))*st.size in
+    let max_y = snd st.top_left + (Array.length st.tiles)*st.size in
+    let cur_x = x - (fst st.top_left) in
+    let cur_y = y - (snd st.top_left) in
+    try assert (cur_x >= 0 && cur_y >= 0 && cur_x < max_x && cur_y < max_y);
     let t = get_tile (x, y) st in
     match t.plant with
     |Some _ -> false
@@ -128,6 +135,7 @@ let make_plant =
           } in
         t.plant <- Some (Sunflower {p = p; sunlight = false}); true
       else false
+    with |_ -> false
 
 let make_zombie =
   let ocaml =

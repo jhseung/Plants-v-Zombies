@@ -162,16 +162,16 @@ let move_z z = z.hit <- false;
   if z.is_eating = true then ()
   else (*let speed = int_of_float (fst z.frozen) * z.mummy.speed in
          snd z.frozen <- snd z.frozen - 1;*)
-  let next_step = z.z_step - z.mummy.speed in
-  let t = z.z_pos in
+    let next_step = z.z_step - z.mummy.speed in
+    let t = z.z_pos in
   if next_step >= 0 then z.z_step <- next_step
-  else remove_z t z;
+  else (remove_z t z;
   match t.left with
-  |None -> t.tile_lost <- true
+  |None -> begin t.tile_lost <- true end
   |Some l ->
     z.z_pos <- l;
-    z.z_step <- next_step mod t.size;
-    l.zombies <- z::(l.zombies)
+    z.z_step <- (next_step + l.size) mod t.size;
+    l.zombies <- z::(l.zombies))
 
 (* Must be called from rightmost tile to the left *)
 let move_p p =
@@ -198,12 +198,12 @@ let make_projectile p =
 
 let grow p =
   match p with
-  |Shooter s ->
+  |Shooter s -> begin
     s.growth <- s.growth + 1 mod s.species.full_growth;
     if s.growth = 0 then make_projectile s
-    else ()
+    else () end
   |Sunflower s ->
-    s.p.growth <- s.p.growth + 1 mod s.p.species.full_growth;
+    s.p.growth <- (s.p.growth + 1) mod s.p.species.full_growth;
     if s.p.growth = 0 then s.sunlight <- true
     else s.sunlight <- false
 
