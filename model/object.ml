@@ -153,9 +153,10 @@ let eat t =
       |hd::tl -> p.attacked <- true;
         let next_hp = List.fold_left (fun acc z -> z.is_eating <- true;
                                        acc - z.mummy.damage) p.p_hp t.zombies in
+        p.p_hp <- next_hp;
         if next_hp > 0 then ()
-        else t.plant <- None;
-        List.fold_left (fun acc z -> z.is_eating <- false) () t.zombies
+        else (t.plant <- None;
+              List.fold_left (fun acc z -> z.is_eating <- false) () t.zombies)
 
 (* Must be called from leftmost tile to the right *)
 let move_z z = z.hit <- false;
