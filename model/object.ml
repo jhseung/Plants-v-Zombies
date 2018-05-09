@@ -233,16 +233,16 @@ let print_projectile p =
 let print_tile t =
   print_coordinates t;
   List.iter (fun z -> print_zombie z; print_endline "") t.zombies;
-  match t.plant with
-  |Some (Shooter p) -> print_plant p;
+  (match t.plant with
+  |Some (Shooter p) -> print_plant p
   |Some (Sunflower {p = p; sunlight = b})
-    -> print_plant p; print_endline (string_of_bool b);
-  |_ -> ();
-  match t.left with
-  |Some l -> print_string "left tile: ";print_coordinates l;
-  |_ -> ();
-  match t.right with
-  |Some r -> print_string "right tile: ";print_coordinates r;
-  |_ -> ();
+    -> print_plant p; print_endline (string_of_bool b)
+  |_ -> ());
+  (match t.left with
+  |Some l -> print_string "left tile: ";print_coordinates l
+  |_ -> ());
+  (match t.right with
+  |Some r -> print_string "right tile: ";print_coordinates r
+  |_ -> ());
     List.iter (fun p -> print_projectile p) t.projectiles;
     print_endline ("tile is lost: "^(string_of_bool t.tile_lost))

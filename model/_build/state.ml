@@ -205,7 +205,7 @@ let print_state st =
 Array.iteri (fun i row ->
     Array.iteri (fun j cell ->
           print_endline ("tile: "^(string_of_int i)^", "^(string_of_int j));
-          print_tile cell)
+          print_tile cell; print_endline "")
       row) st.tiles;
 print_endline ("sunlight: "^(string_of_int st.sunlight));
 print_endline ("total: "^(string_of_int st.total))
