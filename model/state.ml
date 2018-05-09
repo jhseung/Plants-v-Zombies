@@ -103,8 +103,6 @@ let make_plant =
     full_growth = 10
   } in
   fun id (x, y) st ->
-    print_endline ("x: "^(string_of_int ((Array.length st.tiles.(0))*st.size)));
-    print_endline ("y: "^(string_of_int ((Array.length st.tiles)*st.size)));
     let max_x = fst st.top_left + (Array.length st.tiles.(0))*st.size in
     let max_y = snd st.top_left + (Array.length st.tiles)*st.size in
     let cur_x = x - (fst st.top_left) in

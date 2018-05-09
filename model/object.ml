@@ -199,7 +199,7 @@ let make_projectile p =
 let grow p =
   match p with
   |Shooter s -> begin
-    s.growth <- s.growth + 1 mod s.species.full_growth;
+      s.growth <- (s.growth + 1) mod s.species.full_growth;
     if s.growth = 0 then make_projectile s
     else () end
   |Sunflower s ->
