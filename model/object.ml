@@ -1,5 +1,6 @@
 (* TODO: freeze
-   TODO: increment sunlight from full-grown sunflowers
+   TODO: chagen steps to floats\
+   TODO: speed up
    TODO: make projectile & shooter growth
    TODO: dead: (object*int) list
    TODO: growth: int: growth + 1 mod full and add sunlight if = full - 1*)
@@ -152,25 +153,26 @@ let eat t =
       |hd::tl -> p.attacked <- true;
         let next_hp = List.fold_left (fun acc z -> z.is_eating <- true;
                                        acc - z.mummy.damage) p.p_hp t.zombies in
+        p.p_hp <- next_hp;
         if next_hp > 0 then ()
-        else t.plant <- None;
-        List.fold_left (fun acc z -> z.is_eating <- false) () t.zombies
+        else (t.plant <- None;
+              List.fold_left (fun acc z -> z.is_eating <- false) () t.zombies)
 
 (* Must be called from leftmost tile to the right *)
 let move_z z = z.hit <- false;
   if z.is_eating = true then ()
   else (*let speed = int_of_float (fst z.frozen) * z.mummy.speed in
          snd z.frozen <- snd z.frozen - 1;*)
-  let next_step = z.z_step - z.mummy.speed in
-  let t = z.z_pos in
+    let next_step = z.z_step - z.mummy.speed in
+    let t = z.z_pos in
   if next_step >= 0 then z.z_step <- next_step
-  else remove_z t z;
+  else (remove_z t z;
   match t.left with
-  |None -> t.tile_lost <- true
+  |None -> begin t.tile_lost <- true end
   |Some l ->
     z.z_pos <- l;
-    z.z_step <- next_step mod t.size;
-    l.zombies <- z::(l.zombies)
+    z.z_step <- (next_step + l.size) mod t.size;
+    l.zombies <- z::(l.zombies))
 
 (* Must be called from rightmost tile to the left *)
 let move_p p =
@@ -197,11 +199,51 @@ let make_projectile p =
 
 let grow p =
   match p with
-  |Shooter s ->
-    s.growth <- s.growth + 1 mod s.species.full_growth;
+  |Shooter s -> begin
+      s.growth <- (s.growth + 1) mod s.species.full_growth;
     if s.growth = 0 then make_projectile s
-    else ()
+    else () end
   |Sunflower s ->
-    s.p.growth <- s.p.growth + 1 mod s.p.species.full_growth;
+    s.p.growth <- (s.p.growth + 1) mod s.p.species.full_growth;
     if s.p.growth = 0 then s.sunlight <- true
     else s.sunlight <- false
+
+let print_coordinates t =
+  print_endline ("(x, y): "^(string_of_int t.x)^", "^(string_of_int t.y))
+
+let print_plant p =
+  print_endline ("species: "^(p.species.species));
+  print_coordinates p.tile;
+  print_endline ("hp: "^(string_of_int p.p_hp));
+  print_endline ("being attacked: "^(string_of_bool p.attacked));
+  print_endline ("growth: "^(string_of_int p.growth))
+
+let print_zombie z =
+  print_endline ("species: "^(z.mummy.species));
+  print_coordinates z.z_pos;
+  print_endline ("hp: "^(string_of_int z.z_hp));
+  print_endline ("step: "^(string_of_int z.z_step));
+  print_endline ("being hit: "^(string_of_bool z.hit));
+  print_endline ("is eating: "^(string_of_bool z.is_eating))
+
+let print_projectile p =
+  print_endline ("species: "^(p.shooter.species));
+  print_coordinates p.p_pos;
+  print_endline ("step: "^(string_of_int p.p_step))
+
+let print_tile t =
+  print_coordinates t;
+  List.iter (fun z -> print_zombie z; print_endline "") t.zombies;
+  (match t.plant with
+  |Some (Shooter p) -> print_plant p
+  |Some (Sunflower {p = p; sunlight = b})
+    -> print_plant p; print_endline (string_of_bool b)
+  |_ -> ());
+  (match t.left with
+  |Some l -> print_string "left tile: ";print_coordinates l
+  |_ -> ());
+  (match t.right with
+  |Some r -> print_string "right tile: ";print_coordinates r
+  |_ -> ());
+    List.iter (fun p -> print_projectile p) t.projectiles;
+    print_endline ("tile is lost: "^(string_of_bool t.tile_lost))

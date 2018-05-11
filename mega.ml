@@ -43,7 +43,7 @@ let init_mega c r size (x, y) total =
     sun_bal = 0;
     num_tiles_wout_sun = c * r;
     stock = ["sunflower", false, 1; "peashooter", false, 0];
-    st = init_state c r size (x, y) total;
+    st = init_state r c size (x, y) total;
     sprite_list = [];
     }
 
@@ -226,16 +226,11 @@ let rec distinct_rand max_num r lst =
 let add_zombie m =
   let (x0, y0) = m.st.top_left in
   let size = m.st.size in
-  let edge = x0 + m.st.size * m.col in
+  let edge = x0 + m.st.size * m.col - 1 in
   let lst = distinct_rand (min m.row m.st.total) m.row [] in
   List.iter (fun r -> make_zombie "ocaml" (edge, r * size + size / 2) m.st) lst;
   m
 
-let update_mega =
-  let counter = ref 0 in
-  fun m -> update m.st; counter := !counter + 1;
-    let m' = dissipate_sunlight m |> add_to_stock |> add_zombie in
-    match !counter with
-    | 1 -> shed_sunlight m'
-    | 5 -> counter := 0; m'
-    | _ -> m'
+let update_mega m =
+  update m.st;
+  dissipate_sunlight m |> add_to_stock |> add_zombie |> shed_sunlight

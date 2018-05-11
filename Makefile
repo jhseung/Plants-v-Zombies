@@ -5,7 +5,7 @@ build:
 		main.d.js
 
 test:
-	ocamlbuild -Is model -use-ocamlfind test_main.byte && ./test_main.byte 
+	ocamlbuild -Is model -use-ocamlfind -plugin-tag "package(js_of_ocaml.ocamlbuild)" test_main.byte && ./test_main.byte 
 
 clean:
 	ocamlbuild -clean
