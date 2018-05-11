@@ -231,11 +231,6 @@ let add_zombie m =
   List.iter (fun r -> make_zombie "ocaml" (edge, r * size + size / 2) m.st) lst;
   m
 
-let update_mega =
-  let counter = ref 0 in
-  fun m -> update m.st; counter := !counter + 1;
-    let m' = dissipate_sunlight m |> add_to_stock |> add_zombie in
-    match !counter with
-    | 1 -> shed_sunlight m'
-    | 5 -> counter := 0; m'
-    | _ -> m'
+let update_mega m =
+  update m.st;
+  dissipate_sunlight m |> add_to_stock |> add_zombie |> shed_sunlight
