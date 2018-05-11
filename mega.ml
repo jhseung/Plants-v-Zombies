@@ -45,7 +45,7 @@ let init_mega c r size (x, y) total =
     stock = ["sunflower", false, 1; "peashooter", false, 0];
     st = init_state c r size (x, y) total;
     sprite_list = [];
-  }
+    }
 
 let tile_of_coord (x, y) m =
   let (x0,y0) = (m.st).top_left in

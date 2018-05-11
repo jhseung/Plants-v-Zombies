@@ -13,6 +13,8 @@ let screen_height = 350.
 let tile_offset_width = 100
 let tile_offset_height = 80
 
+let peashooter_slowdown = 5
+
 type background_object = {
   coords: float*float;
   img_src: string;
@@ -62,7 +64,7 @@ let update_peashooter_sprite (sprite:sprite) =
   if sprite.max_frame_count > sprite.current_frame then
     if sprite.current_frame mod 5 <> 0 then
     begin
-      if sprite.count mod 5 = 4 then
+      if sprite.count mod peashooter_slowdown = peashooter_slowdown-1 then
       begin
         sprite.offset <- (x+.52.,y);
         sprite.current_frame <- sprite.current_frame + 1;
@@ -72,7 +74,7 @@ let update_peashooter_sprite (sprite:sprite) =
     end
     else 
     begin 
-      if sprite.count mod 5 = 4 then
+      if sprite.count mod peashooter_slowdown =peashooter_slowdown-1 then
       begin
         sprite.offset <- (0.,y+.53.2);
         sprite.current_frame <- sprite.current_frame + 1;

@@ -20,11 +20,29 @@ let get_element id =
 (* Difficulty of playing level -- number of zombies *)
 let difficulty = 10
 
+(* Initialize mega state with ref *)
 let mega = ref (init_mega num_rows num_cols tile_size top_left_coord difficulty)
+
+(* User click listener *)
+let mouseclick event =
+  let coords = (event##clientX, event##clientY) in
+  if !mega.click_state.prev_click then
+    begin
+    mega.click_state <- {prev_click = false; clicked_plant="none"};
+    (* Update game board if trying to plant a plant*)
+    end
+  else
+    begin
+    (* See if plant was clicked *)
+    mega.click_state <- {prev_click = true; clicked_plant="none"};
+    end
+  
 
 (* Loop game state. *)
 let main_loop context =
+  let count = 1 in
   let rec game_loop () =
+    if count mod 5 = 0 then
     Gui.render_page context !mega;
     (* mega := update_mega !mega; *)
     Html.window##requestAnimationFrame(
@@ -41,6 +59,8 @@ let start () =
   canvas##width <- 650;
   canvas##height <- 350; 
   Dom.appendChild gui canvas;
+  let _ = Html.addEventListener document Html.Event.click (Html.handler mouseclick)
+    Js._true in
   let context = canvas##getContext (Html._2d_) in
   main_loop context;;
 
