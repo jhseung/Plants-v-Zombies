@@ -4,7 +4,20 @@ open Mega
   [Cstart] represents a click on the start button.
   [Cgarden (x,y)] represents a click on coordinates [(x,y)].
   [Cstock f] represents a click on the flora of type [f] in the stock panel.*)
-type clicked = Cstart | Cgarden of int*int | Cstock of flora_t
+type clicked = Cstart | Cgarden of float*float | Cstock of flora_t
+
+(*[round_pos x] rounds a non-negative float [x] to its nearest integer and
+  returns that integer.*)
+let round_pos x =
+  let trunc = int_of_float x in
+  if (x -. float_of_int trunc) > 0.5 then 1 + trunc
+  else trunc;;
+
+(*[round x] rounds a float [x] to its nearest integer and returns that integer.
+*)
+let round x =
+  if x >= 0.0 then round_pos x
+  else ~- (round_pos (~-.x));;
 
 (*[plant_flora_helper f (x,y) prev curr m] returns [prev',curr], where [f] is
   a flora type that has been selected in the stock panel and waits to be
@@ -67,6 +80,7 @@ let make_move prev curr m =
     if get_num_in_stock f2 m > 0 then
       (curr, select_flora_in_stock f2 true m)
     else (prev, m)
-  | (Cstock f, Cgarden (x,y)) -> click_garden_after_stock f (x,y) prev curr m
-  | (_, Cgarden (x,y)) -> click_garden (x,y) prev curr m
+  | (Cstock f, Cgarden (x,y)) ->
+    click_garden_after_stock f (round x, round y) prev curr m
+  | (_, Cgarden (x,y)) -> click_garden (round x, round y) prev curr m
   | (_, Cstart) -> failwith "Unimplemented"
