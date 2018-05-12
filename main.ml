@@ -24,30 +24,38 @@ let difficulty = 10
 let mega = ref (init_mega num_rows num_cols tile_size top_left_coord difficulty)
 
 (* User click listener *)
-let mouseclick event =
+(* let mouseclick event =
   let coords = (event##clientX, event##clientY) in
   if !mega.click_state.prev_click then
     begin
-    mega.click_state <- {prev_click = false; clicked_plant="none"};
     (* Update game board if trying to plant a plant*)
     end
   else
     begin
     (* See if plant was clicked *)
-    mega.click_state <- {prev_click = true; clicked_plant="none"};
     end
-  
+   *)
+
+let slow_factor = 2
 
 (* Loop game state. *)
 let main_loop context =
-  let count = 1 in
+  let count = ref 1 in
   let rec game_loop () =
-    if count mod 5 = 0 then
+    if !count mod slow_factor = 0 then
+    begin
     Gui.render_page context !mega;
     (* mega := update_mega !mega; *)
+    count := 1;
     Html.window##requestAnimationFrame(
       Js.wrap_callback (fun (t:float) -> game_loop ())
-    ) |> ignore in
+      ) |> ignore; 
+    end
+    else
+    count := !count + 1; in
+    (* Html.window##requestAnimationFrame(
+      Js.wrap_callback (fun (t:float) -> game_loop ())
+      ) |> ignore in *)
   game_loop ()
 
 (* Initialize game loop. *)
@@ -59,8 +67,8 @@ let start () =
   canvas##width <- 650;
   canvas##height <- 350; 
   Dom.appendChild gui canvas;
-  let _ = Html.addEventListener document Html.Event.click (Html.handler mouseclick)
-    Js._true in
+  (* let _ = Html.addEventListener document Html.Event.click (Html.handler mouseclick)
+    Js._true in *)
   let context = canvas##getContext (Html._2d_) in
   main_loop context;;
 
