@@ -4,7 +4,7 @@ open Mega
   [Cstart] represents a click on the start button.
   [Cgarden (x,y)] represents a click on coordinates [(x,y)].
   [Cstock f] represents a click on the flora of type [f] in the stock panel.*)
-type clicked = Cstart | Cgarden of int*int | Cstock of flora_t
+type clicked = Cstart | Cgarden of float*float | Cstock of flora_t
 
 (*[make_move prev curr m] is [(prev',m')] where [prev] is the latest mouse click
   on an available flora in stock that has not been planted yet if there exists
