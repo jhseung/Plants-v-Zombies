@@ -228,7 +228,9 @@ let add_zombie m =
   let size = m.st.size in
   let edge = x0 + m.st.size * m.col - 1 in
   let lst = distinct_rand (min 2 m.st.total) m.row [] in
-  List.iter (fun r -> make_zombie "ocaml" (edge, r * size + size / 2) m.st) lst;
+  List.iter
+    (fun r -> make_zombie "ocaml" (edge, y0 + r * size + size / 2) m.st)
+    lst;
   m
 
 let update_mega =
