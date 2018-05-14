@@ -11,19 +11,31 @@ type sprite = {
   mutable offset: float*float; (* location of current frame image in sprite*)
 }
 
-let to_sprite objtype size coords =
+let to_sprite objtype coords =
   let max_frame_count = (
     match objtype with
     | "peashooter" -> 24 
-    | "ocaml" -> 5
-    | _ -> 1
+    | "ocaml" -> 6
+    | "projectile" -> 1
+    | _ -> 0
   ) in 
   let reference = (
   match objtype with
     | "peashooter" -> "sprites/peashooter.png"
-    | "ocaml" -> "sprites/camel.png"
-    | _ -> "sprites/projectile.png"
-  ) in 
+    | "ocaml" -> "sprites/zombie_walk.png"
+    | "projectile" -> "sprites/peashooter_projectile.png"
+    | "sunflower" -> "sprites/sunflower.png"
+    | _ -> ""
+  ) in
+  let size = (
+  match objtype with
+    | "peashooter" -> 47.
+    | "ocaml" -> 55.
+    | "projectile" -> 12.
+    | "sunflower" -> 52.
+    | _ -> 0.
+  )
+  in 
   {
     coords = coords;
     current_frame = 0;

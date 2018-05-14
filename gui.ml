@@ -10,8 +10,8 @@ let document = Html.document
 let screen_width = 650.
 let screen_height = 350.
 
-let tile_offset_width = 100
-let tile_offset_height = 80
+let tile_offset_width = 0.
+let tile_offset_height = 80.
 
 type background_object = {
   coords: float*float;
@@ -22,15 +22,15 @@ type background_object = {
  * cooldown or not. *)
 let (background : background_object list) = [
   {
-    coords=(100.,0.);
+    coords=(0.,0.);
     img_src="sprites/peashooter-card.png";
   };
   {
-    coords=(170.,0.);
+    coords=(70.,0.);
     img_src="sprites/sunflower-card.png";
   };
   {
-    coords=(100.,80.);
+    coords=(tile_offset_width,tile_offset_height);
     img_src="sprites/tiles.png"
   }
 ]
@@ -77,33 +77,28 @@ let update_peashooter_sprite (sprite:sprite) =
 
 (* [update_sunflower_sprite] updates the sprite field of a sunflower *)
 let update_sunflower_sprite sprite = 
-  let curr = sprite.current_frame in
   let (x,y) = sprite.offset in
-  if sprite.max_frame_count >= sprite.current_frame then
-    if curr mod 5 <> 0 then
+  if sprite.max_frame_count > sprite.current_frame then
+    if sprite.current_frame mod 5 <> 0 then
     begin
-      sprite.offset <- (x+.47.,y);
-      sprite.current_frame <- sprite.current_frame + 1;
+        sprite.offset <- (x+.47.,y);
+        sprite.current_frame <- sprite.current_frame + 1;
     end
     else 
     begin 
-      sprite.offset <- (0.,y+.47.);
-      sprite.current_frame <- sprite.current_frame + 1;
+        sprite.offset <- (0.,y+.45.);
+        sprite.current_frame <- sprite.current_frame + 1;
     end
   else begin
-    sprite.current_frame <- 0;
+    sprite.current_frame <- 1;
     sprite.offset <- (0.,0.);
-  end;;
+  end
 
 let update_zombie_sprite sprite =
-  let curr = sprite.current_frame in
   let (x,y) = sprite.offset in
-  if sprite.max_frame_count >= sprite.current_frame then
-    if curr mod 5 <> 0 then
+  if sprite.max_frame_count > sprite.current_frame then
     begin
-      sprite.offset <- (x+.61.,y);
-    end
-    else begin sprite.offset <- (0.,y+.61.);
+    sprite.offset <- (x+.29.,y);
     sprite.current_frame <- sprite.current_frame + 1;
     end
   else begin
@@ -126,34 +121,13 @@ let update_sprite spr =
       update_peashooter_sprite spr; spr
     | "sprites/sunflower.png" ->
       update_sunflower_sprite spr; spr
-    | "sprites/camel.png" ->
+    | "sprites/zombie_walk.png" ->
       update_zombie_sprite spr; spr
     | _ -> spr);;
 
 let draw_sprites context spr_list = 
   let updated_sprites = List.map (fun x -> update_sprite x) spr_list in
   List.map (fun x -> render_sprite context x) updated_sprites |> ignore;;
-
-(* TODO: I need an imperative sprite list inside of mega or state to update the models
- * accordingly. I'm really not sure if using tiles is the right way to go about this.
- * Cannot have correct animations w/o strong references to each sprite object.*)
-(* [render_tiles context state] renders to screen all the tile information of
- * state object. *)
-let draw_tiles (context: Html.canvasRenderingContext2D Js.t) (state:state) =
-  for i = 0 to Array.length state.tiles - 1 do
-    let tile_row = state.tiles.(i) in
-    for j = 0 to Array.length state.tiles - 1 do
-      let tile = tile_row.(j) in
-      let zombies = tile.zombies in
-      let plant = tile.plant in
-      let projectiles = tile.projectiles in
-      (match plant with
-      | Some p -> 
-        let plant_sprite = to_sprite "peashooter" 47. (float_of_int tile.x, float_of_int tile.y) in
-        render_sprite context plant_sprite;
-      | None -> ());
-    done
-  done;;
 
 (* [draw_with_context] draws to context an image given [img_src] as the path file to 
  * the image and [coord] as the top-left point of the image. *)
@@ -166,10 +140,19 @@ let draw_with_context (context: Html.canvasRenderingContext2D Js.t) img_src coor
 let draw_constants (context: Html.canvasRenderingContext2D Js.t) =
   List.map (fun x -> draw_with_context context x.img_src x.coords) background;;
 
+(* [draw_sunflower_balance] draws the current sunflower balance *)
+let draw_sunflower_balance (context: Html.canvasRenderingContext2D Js.t) balance =
+  let balance = js ("Sunflower: " ^ string_of_int balance) in
+  context##fillStyle <- js "black";
+  context##font <- js "16px Helvetica";
+  context##fillText (balance, 450., 30.);;
+
 let clear_context (context: Html.canvasRenderingContext2D Js.t) = 
   context##clearRect (0., 0., screen_height, screen_width) |> ignore
 
-let render_page (context: Html.canvasRenderingContext2D Js.t) mega = 
-  (* clear_context context;  *)
+let render_page (context: Html.canvasRenderingContext2D Js.t) (mega:mega) = 
+  clear_context context; 
   context |> draw_constants |> ignore;
-  draw_sprites context sprite_list;
+  let spr_list = mega.st |> to_sprites in
+  draw_sunflower_balance context mega.sun_bal;
+  draw_sprites context spr_list;

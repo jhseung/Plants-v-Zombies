@@ -14,4 +14,4 @@ type sprite = {
 (* [to_sprite] takes in an object representing the object type, an int representing
  * the the size of the sprite, and int*int representing the coordinates for the 
  * sprite to be placed in the context, and returns a sprite object. *)
-val to_sprite : string -> float -> float*float -> sprite
+val to_sprite : string -> float*float -> sprite

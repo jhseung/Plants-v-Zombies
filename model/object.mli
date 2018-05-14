@@ -38,7 +38,7 @@ type tile =
   }
 
 (*p_step initialized as 0 i.e. the left side of the tile *)
-and projectile = {shooter: info; mutable p_pos: tile; mutable p_step: int}
+and projectile = {shooter: info; mutable p_pos: tile; mutable p_step: int; name: string}
 
 (* z_step initialized as size - 1 i.e. the right side of the tile.
    is_eating set to true if there is flora on the same tile as the zombie *)

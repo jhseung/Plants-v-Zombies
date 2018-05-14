@@ -38,7 +38,8 @@ and projectile =
   {
     shooter: info;
     mutable p_pos: tile;
-    mutable p_step: int
+    mutable p_step: int;
+    name: string;
   }
 
 (* z_step initialized as size - 1 i.e. the right side of the tile.
@@ -193,7 +194,8 @@ let make_projectile p =
     {
       shooter = p.species;
       p_pos = p.tile;
-      p_step = p.tile.size/2
+      p_step = p.tile.size/2;
+      name = "projectile";
     } in
   p.tile.projectiles <- pea::p.tile.projectiles
 

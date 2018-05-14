@@ -166,7 +166,7 @@ let get_sunlight st = st.sunlight
 let get_type = function
   |Zombie z -> z.mummy.species
   |Plant p -> p.species.species
-  |Projectile p -> p.shooter.species
+  |Projectile p -> p.name
 
 let get_objects st =
   Array.fold_left (fun acc_row row -> acc_row@
