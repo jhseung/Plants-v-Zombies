@@ -1,6 +1,6 @@
 #directory "_build";;
 #directory "_build/model";;
-#load "object.cmo";;
-#load "state.cmo";;
+#load "object.d.cmo";;
+#load "state.d.cmo";;
 #load "mega.cmo";;
 #load "control.cmo";;

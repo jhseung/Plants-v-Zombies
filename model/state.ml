@@ -1,4 +1,5 @@
 open Object
+open Sprite
 
 type state = {
   top_left: int*int;
@@ -67,18 +68,6 @@ let update_tiles tiles =
       |None -> ()
       |Some p -> grow p) tiles
 
-let update st =
-  st.sunlight <- 0;
-  update_tiles st.tiles;
-  iter_matrix (fun cell ->
-      match cell.plant with
-      |None -> ()
-      |Some p ->
-        match p with
-        |Sunflower {sunlight = b; _} when b = true ->
-          st.sunlight <- st.sunlight + 1
-        |_ -> ()) st.tiles
-
 let get_tile (x, y) st =
   let col = (x - (fst st.top_left))/st.size in
   let row = (y - (snd st.top_left))/st.size in
@@ -113,6 +102,9 @@ let make_plant =
     match t.plant with
     |Some _ -> false
     |_ -> match t.zombies with |_::_ -> false |_ ->
+      let x = t.x + t.size/2 in
+      let y = t.y + t.size/2 in
+      let crds = (float_of_int x, float_of_int y) in
       if id = "peashooter" then let species = peashooter in
         let p =
           {
@@ -120,7 +112,8 @@ let make_plant =
             tile = t;
             p_hp = species.hp;
             attacked = false;
-            growth = 0
+            growth = 0;
+            sprite = to_sprite "peashooter" crds;
           } in
         plant (Some (Shooter p)) t; true
       else if id = "sunflower" then
@@ -130,7 +123,8 @@ let make_plant =
             tile = t;
             p_hp = sunflower.hp;
             attacked = false;
-            growth = 0
+            growth = 0;
+            sprite = to_sprite "sunflower" crds;
           } in
         t.plant <- Some (Sunflower {p = p; sunlight = false}); true
       else false
@@ -149,6 +143,9 @@ let make_zombie =
   fun id (x, y) st ->
     let t = get_tile (x, y) st in
     if id = "ocaml" then let species = ocaml in
+      let x = t.x + x - t.x in
+      let y = t.y + t.size/2 in
+      let crds = (float_of_int x,float_of_int y) in
       let z =
         {
           mummy = species;
@@ -156,7 +153,8 @@ let make_zombie =
           z_hp = ocaml.hp;
           z_step = x - t.x;
           hit = false;
-          is_eating = false
+          is_eating = false;
+          sprite = to_sprite "ocaml" crds;
         } in
       t.zombies <- z::t.zombies;
       st.total <- st.total - 1
@@ -167,7 +165,7 @@ let get_sunlight st = st.sunlight
 let get_type = function
   |Zombie z -> z.mummy.species
   |Plant p -> p.species.species
-  |Projectile p -> p.shooter.species
+  |Projectile p -> p.name
 
 let get_objects st =
   Array.fold_left (fun acc_row row -> acc_row@
@@ -191,15 +189,15 @@ let get_coordinates = function
   |Zombie z ->
     let x = z.z_pos.x + z.z_step in
     let y = z.z_pos.y + z.z_pos.size/2 in
-    (x, y)
+    (float_of_int x,float_of_int y)
   |Plant p ->
     let x = p.tile.x + p.tile.size/2 in
     let y = p.tile.y + p.tile.size/2 in
-    (x, y)
+    (float_of_int x, float_of_int y)
   |Projectile p ->
     let x = p.p_pos.x + p.p_step in
     let y = p.p_pos.y + p.p_pos.size/2 in
-    (x, y)
+    (float_of_int x, float_of_int y)
 
 let has_won st =
   st.total <= 0 && not (has_lost st) &&
@@ -207,6 +205,27 @@ let has_won st =
       Array.for_all (fun cell ->
           match cell.zombies with |[] -> true |_ ->false)
     row) st.tiles
+
+let update_sprites obs =
+  let update_sprite ob = 
+    let crds = get_coordinates ob in
+    match ob with
+    | Zombie z -> z.sprite.coords = crds;
+    | Plant p -> p.sprite.coords = crds;
+    | Projectile p -> p.sprite.coords = crds; in
+  List.map update_sprite obs |> ignore;;
+
+let update st =
+  st.sunlight <- 0;
+  update_tiles st.tiles;
+  iter_matrix (fun cell ->
+      match cell.plant with
+      |None -> ()
+      |Some p ->
+        match p with
+        |Sunflower {sunlight = b; _} when b = true ->
+          st.sunlight <- st.sunlight + 1
+        |_ -> ()) st.tiles
 
 let print_state st =
 Array.iteri (fun i row ->

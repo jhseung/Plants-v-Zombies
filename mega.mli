@@ -77,7 +77,7 @@ val collect_sunlight : int*int -> mega -> mega
 (*[update_mega m] updates the mega state [m] by one step and returns the new
   mega state, i.e.
   puts sunlight in the garden according to the number of sunflowers present in
-  the garden (this alone is done only once every five calls to update_mega);
+  the garden (this alone is done once every 10 calls to [update_mega]);
   makes the uncollected sunlight that have been present for a while disappear;
   pays collected sunlight for more plants and add these plants to stock;
   adds a random number (can be 0) of zombies at the right edge of the garden

@@ -1,3 +1,4 @@
 ignore/*
 */_build/*
 _build/*
+model/_build

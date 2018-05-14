@@ -1,4 +1,5 @@
 open Object
+open Sprite
 
 (* top_left = Cartesian coordinates of the top left corner of the stock panel.
    tiles    = tiles of the garden, containing the location and size of the tiles
@@ -15,7 +16,10 @@ type state = {
   mutable total: int;
 }
 
-type ob = |Zombie of zombie |Plant of plant |Projectile of projectile
+type ob = 
+  |Zombie of zombie 
+  |Plant of plant 
+  |Projectile of projectile
 
 (*type objects =
   {
@@ -24,7 +28,9 @@ type ob = |Zombie of zombie |Plant of plant |Projectile of projectile
     projectiles: projectile list
   }*)
 
-type character = |Z of zombie |P of flora
+type character = 
+  |Z of zombie 
+  |P of flora
 
 
 (*position of sunlight and number of time steps since created*)
@@ -72,7 +78,7 @@ val get_objects: state -> ob list
 val has_lost: state -> bool
 
 (* Returns the coordinates of type ob *)
-val get_coordinates: ob -> int*int
+val get_coordinates: ob -> float*float
 
 (* Returns true if total = 0 and there are no zombie on any tile *)
 val has_won: state -> bool

@@ -73,6 +73,9 @@ and flora =
   |Sunflower of sunflower
 
 
+(*type item = |Zombie of zombie |Plant of plant
+              |Projectile of projectile*)
+
 let plant f t = t.plant <- f
 
 (* Updates the tile after removing zombie z from t.zombies *)

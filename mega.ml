@@ -40,12 +40,12 @@ let init_mega c r size (x, y) total =
     col = c;
     row = r;
     sun = Array.make_matrix c r None;
-    sun_bal = 0;
+    sun_bal = 100;
     num_tiles_wout_sun = c * r;
     stock = ["sunflower", false, 1; "peashooter", false, 0];
     st = init_state r c size (x, y) total;
     sprite_list = [];
-  }
+    }
 
 let tile_of_coord (x, y) m =
   let (x0,y0) = (m.st).top_left in
@@ -227,15 +227,17 @@ let add_zombie m =
   let (x0, y0) = m.st.top_left in
   let size = m.st.size in
   let edge = x0 + m.st.size * m.col - 1 in
-  let lst = distinct_rand (min m.row m.st.total) m.row [] in
-  List.iter (fun r -> make_zombie "ocaml" (edge, r * size + size / 2) m.st) lst;
+  let lst = distinct_rand (min 2 m.st.total) m.row [] in
+  List.iter
+    (fun r -> make_zombie "ocaml" (edge, y0 + r * size + size / 2) m.st)
+    lst;
   m
 
 let update_mega =
   let counter = ref 0 in
-  fun m -> update m.st; counter := !counter + 1;
-    let m' = dissipate_sunlight m |> add_to_stock |> add_zombie in
-    match !counter with
-    | 1 -> shed_sunlight m'
-    | 5 -> counter := 0; m'
-    | _ -> m'
+  fun m ->
+  let m' = dissipate_sunlight m |> add_to_stock |> shed_sunlight in
+  update m.st; counter := !counter + 1;
+  if !counter < 50 then m'
+  else if !counter mod 10 = 0 then (counter := 50; add_zombie m')
+  else m'
