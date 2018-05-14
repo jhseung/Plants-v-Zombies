@@ -42,9 +42,6 @@ let tests1 =
        | _ -> false
       ));
 
-  "get sunlight in state with a sunflower" >::
-  (fun _ -> assert_equal true (update st; (get_sunlight st) > 0));
-
   "has_lost true" >::
   (fun _ -> assert_equal true
       (make_zombie "ocaml" (0,0) st; update st; has_lost st));
