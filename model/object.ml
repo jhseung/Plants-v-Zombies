@@ -73,9 +73,6 @@ and flora =
   |Sunflower of sunflower
 
 
-(*type item = |Zombie of zombie |Plant of plant
-              |Projectile of projectile*)
-
 let plant f t = t.plant <- f
 
 (* Updates the tile after removing zombie z from t.zombies *)
@@ -117,7 +114,7 @@ let rec hit_before_crossing r =
   |hdp::tlp ->
     match r.zombies with
     |[] -> ()
-    |hdz::tlz ->
+    |hdz::tlz -> print_endline "b";
       let default_p = hdp in
       let rightmost = rightmost_p l default_p in
       (* Exists zombies between the rightmost projectile on l and tile r *)
@@ -126,7 +123,7 @@ let rec hit_before_crossing r =
         let leftmost = leftmost_z r default_z in
         if l.size - rightmost.p_step + leftmost.z_step
            > rightmost.shooter.speed + leftmost.mummy.speed then ()
-        else hit_z rightmost leftmost l r; hit_before_crossing r
+        else (hit_z rightmost leftmost l r; hit_before_crossing r)
 
 (* Updates the tile for any clash between the zombie and the projectile *)
 let rec hit t =
@@ -135,13 +132,14 @@ let rec hit t =
   |hdp::tlp ->
     let default_p = hdp in match t.zombies with
     |[] -> ()
-    |hdz::tlz -> let default_z = hdz in
+    |hdz::tlz -> print_endline "a"; let default_z = hdz in
       (* leftmost zombie on the tile *)
       let leftmost = leftmost_z t default_z in
       (* rightmost projectile on the tile *)
       let rightmost = rightmost_p t default_p  in
-      if leftmost.z_step > rightmost.p_step then ()
-      else hit_z rightmost leftmost t t; hit t
+      if leftmost.z_step - leftmost.mummy.speed
+         > rightmost.p_step +  rightmost.shooter.speed then ()
+      else (hit_z rightmost leftmost t t; hit t)
 
 let eat t =
   match t.plant with
@@ -227,7 +225,7 @@ let print_zombie z =
   print_endline ("is eating: "^(string_of_bool z.is_eating))
 
 let print_projectile p =
-  print_endline ("species: "^(p.shooter.species));
+  print_endline ("projectile species: "^(p.shooter.species));
   print_coordinates p.p_pos;
   print_endline ("step: "^(string_of_int p.p_step))
 

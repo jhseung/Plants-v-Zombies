@@ -54,6 +54,7 @@ let init_state row col size (x_cord, y_cord) total =
   }
 
 let update_tiles tiles =
+  iter_matrix (fun cell -> hit cell) tiles;
   iter_matrix (fun cell -> hit_before_crossing cell) tiles;
   iter_matrix (fun cell ->
       List.iter (fun z -> move_z z) cell.zombies) tiles;

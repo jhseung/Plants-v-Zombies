@@ -80,6 +80,8 @@ val plant: flora option -> tile -> unit
    between elements in r.zombies and elements in r.left.projectiles. *)
 val hit_before_crossing: tile -> unit
 
+val hit: tile -> unit
+
 (* [move_z z] updates z.tile to account for the movement of z *)
 val move_z: zombie -> unit
 
