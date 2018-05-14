@@ -1,8 +1,6 @@
-open State
-
 (* Sprite record object containing information about each sprite item - plant, camel, projectile *)
 type sprite = {
-  coords: float*float; (* coordinates of sprite in context *)
+  mutable coords: float*float; (* coordinates of sprite in context *)
   mutable current_frame: int; (* current sprite # *)
   mutable max_frame_count: int; (* total # of images in sprite *)
   mutable count: int; (* count used to slow down animation speed *)
@@ -29,19 +27,19 @@ let to_sprite objtype coords =
   ) in
   let size = (
   match objtype with
-    | "peashooter" -> 47.
-    | "ocaml" -> 55.
-    | "projectile" -> 12.
-    | "sunflower" -> 52.
-    | _ -> 0.
+    | "peashooter" -> (47.,47.)
+    | "ocaml" -> (27.,55.)
+    | "projectile" -> (12.,12.)
+    | "sunflower" -> (52.,52.)
+    | _ -> (0.,0.)
   )
   in 
   {
     coords = coords;
-    current_frame = 0;
+    current_frame = 1;
     max_frame_count = max_frame_count;
     reference = reference;
-    frame_size = (size,size);
+    frame_size = size;
     offset = (0.,0.);
-    count = 0;
+    count = 1;
   }

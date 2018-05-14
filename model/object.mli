@@ -1,3 +1,4 @@
+open Sprite
 (* Freeze and full_growth defined for plant and projectiles only.
    Freeze denotes the division by which
    speed is reduced to if hit by the projectile.
@@ -38,25 +39,36 @@ type tile =
   }
 
 (*p_step initialized as 0 i.e. the left side of the tile *)
-and projectile = {shooter: info; mutable p_pos: tile; mutable p_step: int; name: string}
+and projectile = {
+                  shooter: info; 
+                  mutable p_pos: tile; 
+                  mutable p_step: int; 
+                  name: string;
+                  sprite: sprite;
+                  }
 
 (* z_step initialized as size - 1 i.e. the right side of the tile.
    is_eating set to true if there is flora on the same tile as the zombie *)
-and zombie = {mummy: info; mutable z_pos: tile; mutable z_hp: int;
-              mutable z_step: int; mutable hit: bool;
-              (*mutable frozen: float*int;*)
-              (* float represents the reduction in speed;
-                 int represent the number of moves the freeze will last *)
-              mutable is_eating: bool}
+and zombie = {
+              mummy: info; 
+              mutable z_pos: tile; 
+              mutable z_hp: int;
+              mutable z_step: int; 
+              mutable hit: bool;
+              (*mutable frozen: float*int;*) 
+(* float represents the reduction in speed; int represent the number of moves the freeze will last *)
+              mutable is_eating: bool;
+              sprite: sprite;
+              }
 
-and plant =
-  {
-    species: info;
-    tile: tile;
-    mutable p_hp: int;
-    mutable attacked: bool;
-    mutable growth: int
-  }
+and plant = {
+              species: info;
+              tile: tile;
+              mutable p_hp: int;
+              mutable attacked: bool;
+              mutable growth: int;
+              sprite: sprite;
+              }
 
 
 and sunflower =  {p: plant; mutable sunlight: bool}

@@ -1,8 +1,6 @@
-open State
-
 (* Sprite record object containing information about each sprite item - plant, camel, projectile *)
 type sprite = {
-  coords: float*float; (* coordinates of sprite in context *)
+  mutable coords: float*float; (* coordinates of sprite in context *)
   mutable current_frame: int; (* current sprite # *)
   mutable max_frame_count: int; (* total # of images in sprite *)
   mutable count: int; (* count used to slow down animation speed *)

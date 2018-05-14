@@ -35,11 +35,13 @@ let in_box (coords: (float*float)) card =
 
 (**)
 let detect_mouse_click coords =
-  let sunflower = (100., 0., 64., 36.) in
-  let peashooter = (170., 0., 64., 36.) in
+  let sunflower = (0., 0., 64., 36.) in
+  let peashooter = (70., 0., 64., 36.) in
+  let garden = (0., 80., 650., 350.) in
   if in_box coords sunflower then "sunflower"
   else if in_box coords peashooter then "peashooter"
-    else "NONE"
+  else if in_box coords garden then "garden"
+  else "NONE"
 
 (* User click listener *)
 let mouseclick (event: Html.mouseEvent Js.t) =
@@ -48,6 +50,7 @@ let mouseclick (event: Html.mouseEvent Js.t) =
   match detect_mouse_click coords with
   | "sunflower" -> Cstock "sunflower"
   | "peashooter" -> Cstock "peashooter"
+  | "garden" -> let x,y = coords in Cgarden(x, y-.80.)
   | _ -> Cstart
   ) in
   let (curr, m) = make_move !prev_click click !mega in

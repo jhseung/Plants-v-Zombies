@@ -1,3 +1,4 @@
+open Sprite
 (* TODO: freeze
    TODO: chagen steps to floats\
    TODO: speed up
@@ -40,6 +41,7 @@ and projectile =
     mutable p_pos: tile;
     mutable p_step: int;
     name: string;
+    sprite: sprite;
   }
 
 (* z_step initialized as size - 1 i.e. the right side of the tile.
@@ -54,7 +56,8 @@ and zombie =
               (*mutable frozen: float*int;*)
 (* float represents the reduction in speed;
    int represent the number of moves the freeze will last *)
-    mutable is_eating: bool
+    mutable is_eating: bool;
+    sprite: sprite;
   }
 
 and plant =
@@ -63,7 +66,8 @@ and plant =
     tile: tile;
     mutable p_hp: int;
     mutable attacked: bool;
-    mutable growth: int
+    mutable growth: int;
+    sprite: sprite;
   }
 
 
@@ -173,6 +177,7 @@ let move_z z = z.hit <- false;
   |Some l ->
     z.z_pos <- l;
     z.z_step <- (next_step + l.size) mod t.size;
+    z.sprite.coords <- (float_of_int (l.x + z.z_step), snd z.sprite.coords);
     l.zombies <- z::(l.zombies))
 
 (* Must be called from rightmost tile to the left *)
@@ -186,16 +191,21 @@ let move_p p =
     |Some r ->
       p.p_pos <- r;
       p.p_step <- next_step mod t.size;
+      p.sprite.coords <- (float_of_int (r.x + p.p_step), snd p.sprite.coords);
       r.projectiles <- p::(r.projectiles)
 
 (* Assume that projectile originates from the center of the tile *)
 let make_projectile p =
+  let x = p.tile.x + p.tile.size/2 in
+  let y = p.tile.y + p.tile.size/2 in
+  let crds = (float_of_int x, float_of_int y) in
   let pea =
     {
       shooter = p.species;
       p_pos = p.tile;
       p_step = p.tile.size/2;
       name = "projectile";
+      sprite = to_sprite "projectile" crds;
     } in
   p.tile.projectiles <- pea::p.tile.projectiles
 

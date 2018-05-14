@@ -97,12 +97,18 @@ let update_sunflower_sprite sprite =
 let update_zombie_sprite sprite =
   let (x,y) = sprite.offset in
   if sprite.max_frame_count > sprite.current_frame then
+    if sprite.count mod 2 = 0 then
     begin
     sprite.offset <- (x+.29.,y);
     sprite.current_frame <- sprite.current_frame + 1;
+    sprite.count <- 1;
+    end
+    else
+    begin
+    sprite.count <- sprite.count + 1;
     end
   else begin
-    sprite.current_frame <- 0;
+    sprite.current_frame <- 1;
     sprite.offset <- (0.,0.);
   end;;
 
@@ -150,9 +156,33 @@ let draw_sunflower_balance (context: Html.canvasRenderingContext2D Js.t) balance
 let clear_context (context: Html.canvasRenderingContext2D Js.t) = 
   context##clearRect (0., 0., screen_height, screen_width) |> ignore
 
+let to_sprites st =
+  let objects = get_objects st in
+  let helper obj =
+    let x,y = get_coordinates obj in
+    let crds = (x, y) in
+    (match get_type obj with
+    | "peashooter" -> to_sprite "peashooter" crds
+    | "sunflower" -> to_sprite "sunflower" crds
+    | "projectile" -> to_sprite "projectile" crds
+    | "ocaml" -> to_sprite "ocaml" crds
+    | _ -> to_sprite "projectile" crds)
+    in
+  List.map helper objects
+
+let get_sprites st = 
+  let objects = get_objects st in
+  let helper obj = 
+    (match obj with
+    | Zombie z -> z.sprite
+    | Plant p -> p.sprite
+    | Projectile p -> p.sprite
+    ) in 
+  List.map helper objects
+
 let render_page (context: Html.canvasRenderingContext2D Js.t) (mega:mega) = 
   clear_context context; 
   context |> draw_constants |> ignore;
-  let spr_list = mega.st |> to_sprites in
+  let spr_list = mega.st |> get_sprites in
   draw_sunflower_balance context mega.sun_bal;
   draw_sprites context spr_list;
