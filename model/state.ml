@@ -217,7 +217,6 @@ let update_sprites obs =
 let update st =
   st.sunlight <- 0;
   update_tiles st.tiles;
-  get_objects st |> update_sprites;
   iter_matrix (fun cell ->
       match cell.plant with
       |None -> ()

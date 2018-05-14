@@ -11,7 +11,7 @@ let state = init_state
 let num_rows = 5
 let num_cols = 9
 let tile_size = 50
-let top_left_coord =(0,0)
+let top_left_coord =(-20,-60)
 
 let assert_fail = fun _ -> assert false
 
@@ -35,9 +35,9 @@ let in_box (coords: (float*float)) card =
 
 (**)
 let detect_mouse_click coords =
-  let sunflower = (0., 0., 64., 36.) in
-  let peashooter = (70., 0., 64., 36.) in
-  let garden = (0., 80., 650., 350.) in
+  let peashooter = (10., 82., 64., 36.) in
+  let sunflower = (80., 82., 64., 36.) in
+  let garden = (10., 162., 650., 350.) in
   if in_box coords sunflower then "sunflower"
   else if in_box coords peashooter then "peashooter"
   else if in_box coords garden then "garden"
@@ -56,6 +56,9 @@ let mouseclick (event: Html.mouseEvent Js.t) =
   let (curr, m) = make_move !prev_click click !mega in
   mega := m;
   prev_click := click; 
+  print_float (fst coords);
+  print_float (snd coords);
+  print_endline "WWTF";
   Js._true
 
 let slow_factor = 4

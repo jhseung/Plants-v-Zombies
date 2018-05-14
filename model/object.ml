@@ -177,7 +177,10 @@ let move_z z = z.hit <- false;
   |Some l ->
     z.z_pos <- l;
     z.z_step <- (next_step + l.size) mod t.size;
-    z.sprite.coords <- (float_of_int (l.x + z.z_step), snd z.sprite.coords);
+    let x = z.z_pos.x + z.z_step in
+    let y = z.z_pos.y + z.z_pos.size/2 in
+    let crds = (float_of_int x,float_of_int y) in
+    z.sprite.coords <- crds;
     l.zombies <- z::(l.zombies))
 
 (* Must be called from rightmost tile to the left *)
