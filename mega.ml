@@ -227,10 +227,15 @@ let add_zombie m =
   let (x0, y0) = m.st.top_left in
   let size = m.st.size in
   let edge = x0 + m.st.size * m.col - 1 in
-  let lst = distinct_rand (min m.row m.st.total) m.row [] in
+  let lst = distinct_rand (min 2 m.st.total) m.row [] in
   List.iter (fun r -> make_zombie "ocaml" (edge, r * size + size / 2) m.st) lst;
   m
 
-let update_mega m =
-  update m.st;
-  dissipate_sunlight m |> add_to_stock |> add_zombie |> shed_sunlight
+let update_mega =
+  let counter = ref 0 in
+  fun m ->
+  let m' = dissipate_sunlight m |> add_to_stock |> shed_sunlight in
+  update m.st; counter := !counter + 1;
+  if !counter < 50 then m'
+  else if !counter mod 10 = 0 then (counter := 50; add_zombie m')
+  else m'
