@@ -27,9 +27,11 @@ let round x =
   [prev'] is [prev], [m'] is [m]. Otherwise it is planted, [prev'] is [curr]
   and [m'] is the resulting mega state.*)
 let plant_flora_helper f (x,y) prev curr m =
-  match plant_a_flora f (x,y) m with
-  | (true, m') -> (curr, m')
-  | (false, m') -> (prev, m')
+  if get_num_in_stock f m <= 0 then (prev, m)
+  else
+    match plant_a_flora f (x,y) m with
+    | (true, m') -> (curr, m')
+    | (false, m') -> (prev, m')
 
 (*[click_garden_after_stock f (x,y) prev curr m] deals with the case where the
   current mouse click [curr] is on a point [(x,y)] in the garden and there is a

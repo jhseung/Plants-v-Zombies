@@ -40,7 +40,7 @@ let init_mega c r size (x, y) total =
     col = c;
     row = r;
     sun = Array.make_matrix c r None;
-    sun_bal = 100;
+    sun_bal = 250;
     num_tiles_wout_sun = c * r;
     stock = ["sunflower", false, 1; "peashooter", false, 0];
     st = init_state r c size (x, y) total;
@@ -53,6 +53,14 @@ let tile_of_coord (x, y) m =
   let r = (y - y0) / (m.st).size in
   if c >= 0 && c < m.col && r >=0 && r < m.row then Some (c, r)
   else None
+
+(*[print_stock m] print the sun balance and stock of mega state [m].*)
+let print_stock m =
+  print_endline ("sun balance = "^(string_of_int m.sun_bal));
+  List.iter
+    (fun (f, s, n) -> f^","^(string_of_bool s)^","^(string_of_int n)
+                      |> print_endline)
+    m.stock
 
 let sunlight_of_tile (c, r) m = m.sun.(c).(r)
 
@@ -170,7 +178,7 @@ let n_species = 2
 let price f =
   match f with
   | "peashooter" -> 100
-  | "sunflower" -> 50
+  | "sunflower" -> 100
   | _ -> failwith "unavailable flora in \'price\'"
 
 (*[flora_of_int i] is the flora type mapped to integer [i].*)
@@ -238,6 +246,7 @@ let update_mega =
   fun m ->
   let m' = dissipate_sunlight m |> add_to_stock |> shed_sunlight in
   update m.st; counter := !counter + 1;
+  (*print_stock m';*)
   if !counter < 50 then m'
   else if !counter mod 10 = 0 then (counter := 50; add_zombie m')
   else m'
