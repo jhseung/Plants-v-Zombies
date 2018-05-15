@@ -11,7 +11,7 @@ let state = init_state
 let num_rows = 5
 let num_cols = 9
 let tile_size = 50
-let top_left_coord =(-20,-60)
+let top_left_coord =(-20,60)
 
 let assert_fail = fun _ -> assert false
 
@@ -50,7 +50,7 @@ let mouseclick (event: Html.mouseEvent Js.t) =
   match detect_mouse_click coords with
   | "sunflower" -> Cstock "sunflower"
   | "peashooter" -> Cstock "peashooter"
-  | "garden" -> let x,y = coords in Cgarden(x, y-.80.)
+  | "garden" -> let x,y = coords in Cgarden(x-.30., y-.100.)
   | _ -> Cstart
   ) in
   let (curr, m) = make_move !prev_click click !mega in

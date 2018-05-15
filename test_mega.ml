@@ -44,11 +44,11 @@ let tests1 =
 let tests2 =
   let m = init_mega 5 1 10 (0,0) 0
           |> plant_a_flora "sunflower" (2,3) |> snd
-          |> repeat update_mega 11
+          |> repeat update_mega 41
   in
   let tile_lst = [0,0; 1,0; 2,0; 3,0; 4,0] in
   [
-    "sunlight_of_tile 11 steps since sunflower planted" >::
+    "sunlight_of_tile 41 steps since sunflower planted" >::
     (fun _ -> assert_equal [Some 0]
         (List.fold_left
            (fun acc (c,r) ->
@@ -59,7 +59,7 @@ let tests2 =
 
     "sunlight dissipated" >::
     (fun _ -> assert_equal []
-        (let md = repeat update_mega 6 m in
+        (let md = repeat update_mega 31 m in
          List.fold_left
            (fun acc (c,r) ->
               let age = sunlight_of_tile (c,r) md in

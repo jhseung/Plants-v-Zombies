@@ -141,14 +141,20 @@ let rec create_sunlights num m =
 (*[shed_sunlight m] creates an amount of sunlight according to the number of
   sunflowers present in the garden in mega state [m], within the constraint that
   there is as most one sunlight in every tile, and returns the new mega state.*)
-let shed_sunlight m =
-  create_sunlights (get_sunlight m.st) m
+let shed_sunlight =
+  let counter = ref 0 in
+  fun m ->
+    let n = get_sunlight m.st in
+    if n > 0 then
+      (counter := !counter + 1;
+       if !counter mod 4 = 0 then create_sunlights n m else m )
+    else m
 
 let collect_sunlight (c,r) m =
     change_sun_bal 50 m |> remove_sunlight (c,r)
 
 (*the number of steps for which a sunlight can be there before it disappears*)
-let life_span_of_sunlight = 5
+let life_span_of_sunlight = 30
 
 (*[dissipate_sunlight_col sun_col acc] adds 1 to each entry of the 1D array
   [sun_col] if that entry is less than [life_span_of_sunlight], makes the entry
@@ -270,8 +276,9 @@ let update_mega =
   let counter = ref 0 in
   fun m ->
   let m' = dissipate_sunlight m |> add_to_stock |> shed_sunlight in
-  update m.st; counter := !counter + 1;
+  update m'.st; counter := !counter + 1;
+  (*get_sun_coords m' |> List.length |> string_of_int |> print_endline;*)
   (*print_stock m';*)
-  if !counter < 50 then m'
-  else if !counter mod 10 = 0 then (counter := 50; add_zombie m')
+  if !counter < 80 then m'
+  else if !counter mod 40 = 0 then (counter := 80; add_zombie m')
   else m'
