@@ -1,6 +1,13 @@
 open Object
 open Sprite
 
+(* top_left = Cartesian coordinates of the top left corner of the stock panel.
+   tiles    = tiles of the garden, containing the location and size of the tiles
+              as well as the zombies, plants and projectiles present in the
+              tile.
+   sunlight = number of new sunlight.
+   total    = total number of zombies to be released.
+*)
 type state = {
   top_left: int*int;
   tiles: (tile array) array;
@@ -9,22 +16,24 @@ type state = {
   mutable total: int;
 }
 
+(* [ob] type is either a zombie, a plant, or a projectile. *)
 type ob =
   |Zombie of zombie
   |Plant of plant
   |Projectile of projectile
 
-type character =
-  |Z of zombie
-  |P of flora
-
-(* Applies function f to each element of the matrix *)
+(* [iter_matrix f t] applies function [f] to each tile in tile array array [t]. *)
 let iter_matrix f tiles =
   Array.iter (fun row ->
       Array.iter (fun cell ->
           f cell)
     row) tiles
 
+(* [init_state r c s (x,y) total] is the initial state with number of columns [c],
+   number of rows [r], tile size [s], and coordinates [(x, y)] for top left
+   corner, [total] the total number of zombies to be released.
+   No plant, zombie or projectile is present on any of the tiles in the initial
+   state. No sunlight is present in the garden either. *)
 let init_state row col size (x_cord, y_cord) total =
   let rec init_row row_n = Array.init col (fun i ->
       {
@@ -54,6 +63,9 @@ let init_state row col size (x_cord, y_cord) total =
     total = total
   }
 
+(* [update_tiles t] update all the information on every tile of tile array
+   array [t].
+*)
 let update_tiles tiles =
   iter_matrix (fun cell -> hit cell) tiles;
   iter_matrix (fun cell -> hit_before_crossing cell) tiles;
@@ -68,11 +80,21 @@ let update_tiles tiles =
       |None -> ()
       |Some p -> grow p) tiles
 
+(* [get_tile (x, y), st] returns the tile cooresponding to coordinates
+   [x, y] in the state [st].
+*)
 let get_tile (x, y) st =
   let col = (x - (fst st.top_left))/st.size in
   let row = (y - (snd st.top_left))/st.size in
   st.tiles.(row).(col)
 
+(* Updates the state with a new flora at coordinates (x, y)
+   If the corresponding tile has tile.plant != None then do nothing.
+   Requirs:
+   String [s] represents a valid flora type id
+   The (x, y) coordinats are within the boundary of the tiles array.
+   Returns true if the plant has been planted, false otherwise (a plant
+   is already on the tile or there are zombies on the tile)*)
 let make_plant =
   let peashooter =
     {
@@ -130,6 +152,10 @@ let make_plant =
       else false
     with |_ -> false
 
+(* Updates the state with a new zombie at coordinates (x, y), state.total -= 1
+   Requirs:
+   String [s] represents a valid zombie type id
+   The (x, y) coordinats are within the boundary of the tiles array. *)
 let make_zombie =
   let ocaml =
     {
@@ -160,13 +186,21 @@ let make_zombie =
       st.total <- st.total - 1
     else ()
 
+(* Returns the number of new sunlight produced by the state [st]. *)
 let get_sunlight st = st.sunlight
 
+(* Returns the type of the ob, i.e. type of mummy, type of
+   flora, type of projectile, as a string id.
+   "peashooter" for peashooter
+   "sunflower" for sunflower
+   "ocaml" for zombie *)
 let get_type = function
   |Zombie z -> z.mummy.species
   |Plant p -> p.species.species
   |Projectile p -> p.name
 
+(* [get_objects st] sweeps all the tiles in state [st] and returns all type ob
+   in state [st] *)
 let get_objects st =
   Array.fold_left (fun acc_row row -> acc_row@
       (Array.fold_left (fun acc cell ->
@@ -178,6 +212,7 @@ let get_objects st =
           plant@zombies@projectiles@acc)
          [] row)) [] st.tiles
 
+(* Returns true if a zombie has crossed a leftmost tile *)
 let has_lost st =
   let b = ref false in
   for i = 0 to Array.length st.tiles - 1 do
@@ -185,6 +220,7 @@ let has_lost st =
   done;
   !b
 
+(* Returns the coordinates of type ob *)
 let get_coordinates = function
   |Zombie z ->
     let x = z.z_pos.x + z.z_step in
@@ -199,6 +235,7 @@ let get_coordinates = function
     let y = p.p_pos.y + p.p_pos.size/2 in
     (float_of_int x, float_of_int y)
 
+(* Returns true if total = 0 and there are no zombie on any tile *)
 let has_won st =
   st.total <= 0 && not (has_lost st) &&
   Array.for_all (fun row ->
@@ -206,6 +243,7 @@ let has_won st =
           match cell.zombies with |[] -> true |_ ->false)
     row) st.tiles
 
+(* [update_sprites obs] updates all the sprite fields of ob list [obs] *)
 let update_sprites obs =
   let update_sprite ob =
     let crds = get_coordinates ob in
@@ -217,6 +255,7 @@ let update_sprites obs =
     | Projectile p -> p.sprite.coords = crds; in
   List.map update_sprite obs |> ignore;;
 
+(* Update the state [st] by one move *)
 let update st =
   st.sunlight <- 0;
   update_tiles st.tiles;
@@ -230,6 +269,7 @@ let update st =
           st.sunlight <- st.sunlight + 1
         |_ -> ()) st.tiles
 
+(* [print_state st] prints out all relevant information about state [st]. *)
 let print_state st =
 Array.iteri (fun i row ->
     Array.iteri (fun j cell ->

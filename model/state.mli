@@ -16,25 +16,10 @@ type state = {
   mutable total: int;
 }
 
-type ob = 
-  |Zombie of zombie 
-  |Plant of plant 
+type ob =
+  |Zombie of zombie
+  |Plant of plant
   |Projectile of projectile
-
-(*type objects =
-  {
-    zombies: zombie list;
-    plants: plant list;
-    projectiles: projectile list
-  }*)
-
-type character = 
-  |Z of zombie 
-  |P of flora
-
-
-(*position of sunlight and number of time steps since created*)
-(*type sunlight = {pos : int*int; age : int}*)
 
 (* [init_state r c s (x,y) total] is the initial state with number of columns [c],
    number of rows [r], tile size [s], and coordinates [(x, y)] for top left
@@ -58,7 +43,7 @@ val make_plant: string -> int * int -> state -> bool
    The (x, y) coordinats are within the boundary of the tiles array. *)
 val make_zombie: string -> int * int -> state -> unit
 
-(* Update all the objects on every tile by one move *)
+(* Update the state [st] by one move *)
 val update: state -> unit
 
 (* Returns the number of new sunlight produced by the state [st]. *)
@@ -71,7 +56,8 @@ val get_sunlight: state -> int
    "ocaml" for zombie *)
 val get_type: ob -> string
 
-(* Returns all type ob in state [st] *)
+(* [get_objects st] sweeps all the tiles in state [st] and returns all type ob
+   in state [st] *)
 val get_objects: state -> ob list
 
 (* Returns true if a zombie has crossed a leftmost tile *)
@@ -83,26 +69,10 @@ val get_coordinates: ob -> float*float
 (* Returns true if total = 0 and there are no zombie on any tile *)
 val has_won: state -> bool
 
+(* [get_tile (x, y), st] returns the tile cooresponding to coordinates
+   [x, y] in the state [st].
+*)
 val get_tile: int*int -> state -> tile
 
+(* [print_state st] prints out all relevant information about state [st]. *)
 val print_state: state -> unit
-
-(*TODO*)
-
-(*
-
-(*[remove_plant (x,y) st] removes the flora at (x,y) from state [st] if
-  it there is an object of type flora on the corresponding tile.*)
-val remove_plant: int * int -> state -> unit
-
-(* Returns true if the plant is being attacked. *)
-val plant_attacked: plant -> bool
-
-(* Returns true if the zombie is being attacked. *)
-val zombie_attacked: zombie -> bool
-
-(* Returns true if the zombie is attacking. *)
-val zombie_attacking: zombie -> bool
-
-(* Returns the hp of the character. *)
-  val get_hp: character -> int*)
