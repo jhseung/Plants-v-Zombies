@@ -36,13 +36,14 @@ type mega = {
 }
 
 let init_mega c r size (x, y) total =
+  Random.self_init ();
   {
     col = c;
     row = r;
     sun = Array.make_matrix c r None;
     sun_bal = 250;
     num_tiles_wout_sun = c * r;
-    stock = ["sunflower", false, 1; "peashooter", false, 0];
+    stock = ["sunflower", false, 1; "peashooter", false, 1];
     st = init_state r c size (x, y) total;
     sprite_list = [];
     }
@@ -154,7 +155,7 @@ let collect_sunlight (c,r) m =
     change_sun_bal 50 m |> remove_sunlight (c,r)
 
 (*the number of steps for which a sunlight can be there before it disappears*)
-let life_span_of_sunlight = 30
+let life_span_of_sunlight = 50
 
 (*[dissipate_sunlight_col sun_col acc] adds 1 to each entry of the 1D array
   [sun_col] if that entry is less than [life_span_of_sunlight], makes the entry
@@ -279,6 +280,5 @@ let update_mega =
   update m'.st; counter := !counter + 1;
   (*get_sun_coords m' |> List.length |> string_of_int |> print_endline;*)
   (*print_stock m';*)
-  if !counter < 80 then m'
-  else if !counter mod 40 = 0 then (counter := 80; add_zombie m')
+  if !counter = 500 || !counter = 100 then (counter := 120; add_zombie m')
   else m'

@@ -64,4 +64,4 @@ let tests3 =
     );
   ]
 
-let tests = tests1 @ tests2 @ tests3
+let tests = tests1 (*@ tests2 @ tests3*)
