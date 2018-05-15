@@ -41,7 +41,7 @@ and projectile =
     mutable p_pos: tile;
     mutable p_step: int;
     name: string;
-    sprite: sprite;
+    mutable sprite: sprite;
   }
 
 (* z_step initialized as size - 1 i.e. the right side of the tile.
@@ -57,7 +57,7 @@ and zombie =
 (* float represents the reduction in speed;
    int represent the number of moves the freeze will last *)
     mutable is_eating: bool;
-    sprite: sprite;
+    mutable z_sprite: sprite;
   }
 
 and plant =
@@ -67,7 +67,7 @@ and plant =
     mutable p_hp: int;
     mutable attacked: bool;
     mutable growth: int;
-    sprite: sprite;
+    mutable p_sprite: sprite;
   }
 
 
@@ -89,7 +89,7 @@ let remove_z t z =
 
 (* Updates the tile after removing zombie z from t.zombies *)
 let remove_p t p =
-  t.projectiles <- List.filter (fun x -> x != p) t.projectiles
+  t.projectiles <- List.filter (fun x -> x != p) t.projectiles;;
 
 let hit_z projectile zombie tile_l tile_r =
   remove_p tile_l projectile;
@@ -180,8 +180,7 @@ let move_z z = z.hit <- false;
     z.z_step <- (next_step + l.size) mod t.size;
     let x = z.z_pos.x + z.z_step in
     let y = z.z_pos.y + z.z_pos.size/2 in
-    let crds = (float_of_int x,float_of_int y) in
-    z.sprite.coords <- crds;
+    z.z_sprite.coords <- (float_of_int x, float_of_int y);
     l.zombies <- z::(l.zombies))
 
 (* Must be called from rightmost tile to the left *)
@@ -195,7 +194,9 @@ let move_p p =
     |Some r ->
       p.p_pos <- r;
       p.p_step <- next_step mod t.size;
-      p.sprite.coords <- (float_of_int (r.x + p.p_step), snd p.sprite.coords);
+      let x = p.p_pos.x + p.p_step in
+      let y = p.p_pos.y + p.p_pos.size/2 in
+      p.sprite.coords <- (float_of_int x, float_of_int y);
       r.projectiles <- p::(r.projectiles)
 
 (* Assume that projectile originates from the center of the tile *)

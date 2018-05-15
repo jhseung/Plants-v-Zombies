@@ -44,7 +44,7 @@ and projectile = {
                   mutable p_pos: tile; 
                   mutable p_step: int; 
                   name: string;
-                  sprite: sprite;
+                  mutable sprite: sprite;
                   }
 
 (* z_step initialized as size - 1 i.e. the right side of the tile.
@@ -58,7 +58,7 @@ and zombie = {
               (*mutable frozen: float*int;*) 
 (* float represents the reduction in speed; int represent the number of moves the freeze will last *)
               mutable is_eating: bool;
-              sprite: sprite;
+              mutable z_sprite: sprite;
               }
 
 and plant = {
@@ -67,7 +67,7 @@ and plant = {
               mutable p_hp: int;
               mutable attacked: bool;
               mutable growth: int;
-              sprite: sprite;
+              mutable p_sprite: sprite;
               }
 
 

@@ -26,33 +26,12 @@ let (background : background_object list) = [
     img_src="sprites/peashooter-card.png";
   };
   {
-    coords=(70.,0.);
+    coords=(80.,0.);
     img_src="sprites/sunflower-card.png";
   };
   {
     coords=(tile_offset_width,tile_offset_height);
     img_src="sprites/tiles.png"
-  }
-]
-
-let sprite_list = [
-  {
-    coords=(100.,80.);
-    current_frame=1;
-    max_frame_count=24;
-    reference="sprites/peashooter.png";
-    frame_size=(52.,52.);
-    offset=(0.,0.);
-    count=0;
-  };
-  {
-    coords=(100.,130.);
-    current_frame=1;
-    max_frame_count=24;
-    reference="sprites/peashooter.png";
-    frame_size=(52.,52.);
-    offset=(0.,0.);
-    count=0;
   }
 ]
 
@@ -81,12 +60,12 @@ let update_sunflower_sprite sprite =
   if sprite.max_frame_count > sprite.current_frame then
     if sprite.current_frame mod 5 <> 0 then
     begin
-        sprite.offset <- (x+.47.,y);
+        sprite.offset <- (x+.50.,y);
         sprite.current_frame <- sprite.current_frame + 1;
     end
     else 
     begin 
-        sprite.offset <- (0.,y+.45.);
+        sprite.offset <- (0.,y+.49.2);
         sprite.current_frame <- sprite.current_frame + 1;
     end
   else begin
@@ -99,7 +78,7 @@ let update_zombie_sprite sprite =
   if sprite.max_frame_count > sprite.current_frame then
     if sprite.count mod 2 = 0 then
     begin
-    sprite.offset <- (x+.29.,y);
+    sprite.offset <- (x+.31.3,y-.0.4);
     sprite.current_frame <- sprite.current_frame + 1;
     sprite.count <- 1;
     end
@@ -117,10 +96,8 @@ let render_sprite (context: Html.canvasRenderingContext2D Js.t) sprite =
   let img = Html.createImg document in
   let (clipx,clipy) = sprite.offset in
   let (w,h) = sprite.frame_size in
-  let (x,y) = sprite.coords in 
+  let (x,y) = sprite.coords in print_float x; print_endline "actual sprite";
   img##src <- js sprite.reference;
-  print_string "X_coord";
-  print_endline (string_of_float x);
   context##drawImage_full (img, clipx, clipy, w, h, x, y, w, h);;
 
 let update_sprite spr =
@@ -129,7 +106,7 @@ let update_sprite spr =
       update_peashooter_sprite spr; spr
     | "sprites/sunflower.png" ->
       update_sunflower_sprite spr; spr
-    | "sprites/zombie_walk.png" ->
+    | "sprites/zombie_girl.png" ->
       update_zombie_sprite spr; spr
     | _ -> spr);;
 
@@ -160,8 +137,8 @@ let draw_stock_balance (context: Html.canvasRenderingContext2D Js.t) balance nam
   context##fillStyle <- js "black";
   context##font <- js "12px Helvetica";
   match name with
-  | "sunflower" -> context##fillText (balance, 0., 50.);
   | "peashooter" -> context##fillText (balance, 0., 50.);
+  | "sunflower" -> context##fillText (balance, 80., 50.);
   | _ -> ();;
 
 let draw_stock_balances (context: Html.canvasRenderingContext2D Js.t) stock =
@@ -172,7 +149,7 @@ let draw_stock_balances (context: Html.canvasRenderingContext2D Js.t) stock =
   List.map (fun x -> draw_stock_balance context (get_bal x) (get_name x)) stock |> ignore;;
 
 let clear_context (context: Html.canvasRenderingContext2D Js.t) = 
-  context##clearRect (0., 0., screen_height, screen_width) |> ignore
+  context##clearRect (0., 0., 1000., 1000.) |> ignore
 
 let to_sprites st =
   let objects = get_objects st in
@@ -192,15 +169,22 @@ let get_sprites st =
   let objects = get_objects st in
   let helper obj = 
     (match obj with
-    | Zombie z -> z.sprite
-    | Plant p -> p.sprite
+    | Zombie z -> z.z_sprite
+    | Plant p -> p.p_sprite
     | Projectile p -> p.sprite
     ) in 
   List.map helper objects
+
+let draw_sunlights context mega = 
+  let coords = get_sun_coords mega in
+  let sprite_list = List.map (fun x -> to_sprite "sunlight" x) coords in
+  List.map (fun x -> render_sprite context x) sprite_list |> ignore;;
 
 let render_page (context: Html.canvasRenderingContext2D Js.t) (mega:mega) = 
   clear_context context; 
   context |> draw_constants |> ignore;
   let spr_list = mega.st |> get_sprites in
   draw_sunflower_balance context mega.sun_bal;
+  draw_stock_balances context mega.stock;
+  draw_sunlights context mega;
   draw_sprites context spr_list;

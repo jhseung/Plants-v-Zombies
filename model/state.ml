@@ -113,7 +113,7 @@ let make_plant =
             p_hp = species.hp;
             attacked = false;
             growth = 0;
-            sprite = to_sprite "peashooter" crds;
+            p_sprite = to_sprite "peashooter" crds;
           } in
         plant (Some (Shooter p)) t; true
       else if id = "sunflower" then
@@ -124,7 +124,7 @@ let make_plant =
             p_hp = sunflower.hp;
             attacked = false;
             growth = 0;
-            sprite = to_sprite "sunflower" crds;
+            p_sprite = to_sprite "sunflower" crds;
           } in
         t.plant <- Some (Sunflower {p = p; sunlight = false}); true
       else false
@@ -154,7 +154,7 @@ let make_zombie =
           z_step = x - t.x;
           hit = false;
           is_eating = false;
-          sprite = to_sprite "ocaml" crds;
+          z_sprite = to_sprite "ocaml" crds;
         } in
       t.zombies <- z::t.zombies;
       st.total <- st.total - 1
@@ -209,15 +209,18 @@ let has_won st =
 let update_sprites obs =
   let update_sprite ob = 
     let crds = get_coordinates ob in
+    print_float (fst crds);
+    print_endline "X_coord";
     match ob with
-    | Zombie z -> z.sprite.coords = crds;
-    | Plant p -> p.sprite.coords = crds;
+    | Zombie z -> z.z_sprite.coords = crds;
+    | Plant p -> p.p_sprite.coords = crds;
     | Projectile p -> p.sprite.coords = crds; in
   List.map update_sprite obs |> ignore;;
 
 let update st =
   st.sunlight <- 0;
   update_tiles st.tiles;
+  get_objects st |> update_sprites;
   iter_matrix (fun cell ->
       match cell.plant with
       |None -> ()

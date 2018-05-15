@@ -6,8 +6,7 @@ module Html = Dom_html
 let js = Js.string
 let document = Html.document
 
-let state = init_state
-
+let slow_factor = 4
 let num_rows = 5
 let num_cols = 9
 let tile_size = 50
@@ -22,7 +21,7 @@ let get_element id =
 let difficulty = 10
 
 (* Initialize mega state with ref *)
-let mega = ref (init_mega num_rows num_cols tile_size top_left_coord difficulty)
+let mega = ref (init_mega num_cols num_rows tile_size top_left_coord difficulty)
 
 let prev_click = ref Cstart
 
@@ -61,8 +60,6 @@ let mouseclick (event: Html.mouseEvent Js.t) =
   print_endline ("Coords:");
   Js._true
 
-let slow_factor = 4
-
 (* Loop game state. *)
 let main_loop context =
   let count = ref 1 in
@@ -90,7 +87,7 @@ let start () =
   let gui = get_element "gui" in
   let h1 = Html.createH1 document in
   let canvas = Html.createCanvas document in
-  Dom.appendChild h1 (document##createTextNode (js "Plants v Camls"));
+  Dom.appendChild h1 (document##createTextNode (js "Plants v Zombies"));
   canvas##width <- 650;
   canvas##height <- 350; 
   Dom.appendChild gui canvas;

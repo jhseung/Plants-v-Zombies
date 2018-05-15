@@ -14,23 +14,26 @@ let to_sprite objtype coords =
     match objtype with
     | "peashooter" -> 24 
     | "ocaml" -> 6
+    | "sunflower" -> 53
     | "projectile" -> 1
-    | _ -> 0
+    | _ -> 1
   ) in 
   let reference = (
   match objtype with
     | "peashooter" -> "sprites/peashooter.png"
-    | "ocaml" -> "sprites/zombie_walk.png"
+    | "ocaml" -> "sprites/zombie_girl.png"
     | "projectile" -> "sprites/peashooter_projectile.png"
     | "sunflower" -> "sprites/sunflower.png"
+    | "sunlight" -> "sprites/sunlight.png"
     | _ -> ""
   ) in
   let size = (
   match objtype with
     | "peashooter" -> (47.,47.)
-    | "ocaml" -> (27.,55.)
+    | "ocaml" -> (31.,55.)
     | "projectile" -> (12.,12.)
-    | "sunflower" -> (52.,52.)
+    | "sunflower" -> (50.,50.)
+    | "sunlight" -> (31.,31.)
     | _ -> (0.,0.)
   )
   in 
