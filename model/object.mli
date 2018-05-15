@@ -40,9 +40,9 @@ type tile =
 
 (*p_step initialized as 0 i.e. the left side of the tile *)
 and projectile = {
-                  shooter: info; 
-                  mutable p_pos: tile; 
-                  mutable p_step: int; 
+                  shooter: info;
+                  mutable p_pos: tile;
+                  mutable p_step: int;
                   name: string;
                   mutable sprite: sprite;
                   }
@@ -50,12 +50,12 @@ and projectile = {
 (* z_step initialized as size - 1 i.e. the right side of the tile.
    is_eating set to true if there is flora on the same tile as the zombie *)
 and zombie = {
-              mummy: info; 
-              mutable z_pos: tile; 
+              mummy: info;
+              mutable z_pos: tile;
               mutable z_hp: int;
-              mutable z_step: int; 
+              mutable z_step: int;
               mutable hit: bool;
-              (*mutable frozen: float*int;*) 
+              (*mutable frozen: float*int;*)
 (* float represents the reduction in speed; int represent the number of moves the freeze will last *)
               mutable is_eating: bool;
               mutable z_sprite: sprite;
@@ -92,6 +92,8 @@ val plant: flora option -> tile -> unit
    between elements in r.zombies and elements in r.left.projectiles. *)
 val hit_before_crossing: tile -> unit
 
+(* [hit t] updates tile [t] to account for any clash between the zombies and
+   the projectiles on tile [t]. *)
 val hit: tile -> unit
 
 (* [move_z z] updates z.tile to account for the movement of z *)
@@ -109,4 +111,5 @@ val eat: tile -> unit
    which is set to false otherwise. *)
 val grow: flora -> unit
 
+(* [print_tile t] prints out all relevant information about tile [t]. *)
 val print_tile: tile -> unit
