@@ -42,7 +42,7 @@ let tests1 =
 ]
 
 let tests2 =
-  let m = init_mega 5 1 10 (0,0) 0
+  let m = init_mega 5 1 10 (0,0) 1
           |> plant_a_flora "sunflower" (2,3) |> snd
           |> repeat update_mega 41
   in
@@ -77,9 +77,9 @@ let tests2 =
              )
              m tile_lst |> update_mega
          in
-         let m' = repeat collect 1000 m in
+         let m' = repeat collect 500 m in
          get_num_in_stock "sunflower" m' > 0
-         || get_num_in_stock "peashooter" m' > 0));
+         || get_num_in_stock "peashooter" m' > 1));
 
   ]
 

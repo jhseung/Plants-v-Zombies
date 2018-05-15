@@ -209,8 +209,8 @@ let has_won st =
 let update_sprites obs =
   let update_sprite ob =
     let crds = get_coordinates ob in
-    print_float (fst crds);
-    print_endline "X_coord";
+    (*print_float (fst crds);*)
+    (*print_endline "X_coord";*)
     match ob with
     | Zombie z -> z.z_sprite.coords = crds;
     | Plant p -> p.p_sprite.coords = crds;

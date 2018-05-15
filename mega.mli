@@ -18,6 +18,8 @@ type zombie_t = string
   stock = list of flora in stock, the entry [(f, s, n)] of the list represents
           that there are a number ([n]) of flora of type [f] in the stock, and
           the flora of type [f] is selected by the player iff [s] is true.
+  difficulty = the difficulty of the game, ranging from 1 to 5.
+               1 is the easiest.
   st = the state of the garden, i.e. positions and health points of flora and
        zombies in the garden. See state.mli for more details.
 *)
@@ -28,13 +30,14 @@ type mega = {
   sun_bal : int;
   num_tiles_wout_sun : int;
   stock : (flora_t * bool * int) list;
+  difficulty : int;
   mutable st : state;
   sprite_list: sprite list;
 }
 
-(* [init_mega c r s (x,y) total] is the initial mega state with number of
+(* [init_mega c r s (x,y) d] is the initial mega state with number of
    columns [c], number of rows [r], tile size [s], and coordinates [(x, y)] for
-   top left corner, [total] the total number of zombies to be released.
+   top left corner, [d] the difficulty of the game (ranging from 1 to 5).
    No plant, zombie or projectile is present on any of the tiles in the initial
    state. No sunlight is present in the garden either. *)
 val init_mega : int -> int -> int -> int*int -> int -> mega
@@ -94,3 +97,7 @@ val collect_sunlight : int*int -> mega -> mega
   removes the plants and zombies that are killed.
 *)
 val update_mega : mega -> mega
+
+(*[zombies_to_come m] is the number of zombies that are to be released in the
+  mega state [m].*)
+val zombies_to_come : mega -> int

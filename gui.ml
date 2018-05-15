@@ -96,7 +96,7 @@ let render_sprite (context: Html.canvasRenderingContext2D Js.t) sprite =
   let img = Html.createImg document in
   let (clipx,clipy) = sprite.offset in
   let (w,h) = sprite.frame_size in
-  let (x,y) = sprite.coords in print_float x; print_endline "actual sprite";
+  let (x,y) = sprite.coords in (*print_float x; print_endline "actual sprite";*)
   img##src <- js sprite.reference;
   context##drawImage_full (img, clipx, clipy, w, h, x, y, w, h);;
 

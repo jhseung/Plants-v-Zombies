@@ -6,6 +6,14 @@ open Mega
   [Cstock f] represents a click on the flora of type [f] in the stock panel.*)
 type clicked = Cstart | Cgarden of float*float | Cstock of flora_t
 
+(*[print_clicked c] print the parsed mouse click [c].*)
+let print_clicked c =
+  match c with
+  | Cstart -> print_endline "start"
+  | Cgarden (x,y) -> "garden "^(string_of_float x)^","^(string_of_float y)
+                     |> print_endline
+  | Cstock f -> "stock "^f |> print_endline
+
 (*[round_pos x] rounds a non-negative float [x] to its nearest integer and
   returns that integer.*)
 let round_pos x =
@@ -73,6 +81,7 @@ let click_garden (x,y) prev curr m =
   specification as [prev] for the next call to [make_move]. [m'] is the mega
   state that results from [curr].*)
 let make_move prev curr m =
+  (*print_clicked prev;*)
   match (prev, curr) with
   | (Cstock f1, Cstock f2) ->
     if get_num_in_stock f2 m > 0 then

@@ -31,11 +31,33 @@ type mega = {
   sun_bal : int;
   num_tiles_wout_sun : int;
   stock : (flora_t * bool * int) list;
+  difficulty : int;
   mutable st : state;
   sprite_list: sprite list;
 }
 
-let init_mega c r size (x, y) total =
+(*[zombies_of_difficulty d] is the total number of zombies to be released in the
+  game for the difficulty level [d].*)
+let zombies_of_difficulty d =
+  match d with
+  | 1 -> 1
+  | 2 -> 5
+  | 3 -> 10
+  | 4 -> 15
+  | 5 -> 15
+  | _ -> 15
+
+(*[stock_of_difficulty d] is the initial stock for the difficulty level [d].*)
+let stock_of_difficulty d =
+  match d with
+  | 1 -> ["sunflower", false, 1; "peashooter", false, 1]
+  | 2 -> ["sunflower", false, 1; "peashooter", false, 2]
+  | 3 -> ["sunflower", false, 1; "peashooter", false, 1]
+  | 4 -> ["sunflower", false, 1; "peashooter", false, 0]
+  | 5 -> ["sunflower", false, 1; "peashooter", false, 0]
+  | _ -> ["sunflower", false, 1; "peashooter", false, 0]
+
+let init_mega c r size (x, y) d =
   Random.self_init ();
   {
     col = c;
@@ -43,8 +65,9 @@ let init_mega c r size (x, y) total =
     sun = Array.make_matrix c r None;
     sun_bal = 250;
     num_tiles_wout_sun = c * r;
-    stock = ["sunflower", false, 1; "peashooter", false, 1];
-    st = init_state r c size (x, y) total;
+    stock = stock_of_difficulty d;
+    difficulty = d;
+    st = init_state r c size (x, y) (zombies_of_difficulty d);
     sprite_list = [];
     }
 
@@ -260,6 +283,17 @@ let rec distinct_rand max_num r lst =
     if List.mem rand lst then lst
     else distinct_rand (max_num - 1) r (rand::lst)
 
+(*[zombie_limit_of_difficulty d] is the maximum number of zombies released at a
+  time for the difficulty level [d].*)
+let zombie_limit_of_difficulty d =
+  match d with
+  | 1 -> 1
+  | 2 -> 1
+  | 3 -> 2
+  | 4 -> 2
+  | 5 -> 3
+  | _ -> 3
+
 (*[add_zombie m] decides whether to let more zombies enter the garden and from
   which lane(s) they enter, and if yes then adds the zombie(s) on the right edge
   of the garden and returns the new mega state, otherwise returns [m].*)
@@ -267,11 +301,24 @@ let add_zombie m =
   let (x0, y0) = m.st.top_left in
   let size = m.st.size in
   let edge = x0 + m.st.size * m.col - 1 in
-  let lst = distinct_rand (min 2 m.st.total) m.row [] in
+  let lim = zombie_limit_of_difficulty m.difficulty in
+  let lst = distinct_rand (min lim m.st.total) m.row [] in
   List.iter
     (fun r -> make_zombie "ocaml" (edge, y0 + r * size + size / 2) m.st)
     lst;
   m
+
+(*1000-[reflect_point d] is the number of calls to update between two
+  generations of zombies for the difficulty level [d]. So the smaller the [d],
+  the smaller the [reflect_point d].*)
+let reflect_point d =
+  match d with
+  | 1 -> 600
+  | 2 -> 600
+  | 3 -> 600
+  | 4 -> 850
+  | 5 -> 950
+  | _ -> 950
 
 let update_mega =
   let counter = ref 0 in
@@ -280,5 +327,8 @@ let update_mega =
   update m'.st; counter := !counter + 1;
   (*get_sun_coords m' |> List.length |> string_of_int |> print_endline;*)
   (*print_stock m';*)
-  if !counter = 500 || !counter = 100 then (counter := 120; add_zombie m')
+  if !counter = 1000 || !counter = 100 then
+    (counter := reflect_point m'.difficulty; add_zombie m')
   else m'
+
+let zombies_to_come m = m.st.total
