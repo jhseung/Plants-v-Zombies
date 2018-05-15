@@ -77,8 +77,8 @@ let make_plant =
   let peashooter =
     {
       species = "peashooter";
-      speed = 5;
-      hp = 5;
+      speed = 1;
+      hp = 20;
       damage = 1;
       freeze = 1;
       full_growth = 5
@@ -87,7 +87,7 @@ let make_plant =
   {
     species = "sunflower";
     speed = 0;
-    hp = 5;
+    hp = 20;
     damage = 0;
     freeze = 0;
     full_growth = 10
@@ -207,7 +207,7 @@ let has_won st =
     row) st.tiles
 
 let update_sprites obs =
-  let update_sprite ob = 
+  let update_sprite ob =
     let crds = get_coordinates ob in
     print_float (fst crds);
     print_endline "X_coord";

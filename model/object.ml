@@ -122,7 +122,7 @@ let rec hit_before_crossing r =
   |hdp::tlp ->
     match r.zombies with
     |[] -> ()
-    |hdz::tlz -> print_endline "b";
+    |hdz::tlz ->
       let default_p = hdp in
       let rightmost = rightmost_p l default_p in
       (* Exists zombies between the rightmost projectile on l and tile r *)
@@ -140,7 +140,7 @@ let rec hit t =
   |hdp::tlp ->
     let default_p = hdp in match t.zombies with
     |[] -> ()
-    |hdz::tlz -> print_endline "a"; let default_z = hdz in
+    |hdz::tlz -> let default_z = hdz in
       (* leftmost zombie on the tile *)
       let leftmost = leftmost_z t default_z in
       (* rightmost projectile on the tile *)
@@ -171,7 +171,10 @@ let move_z z = z.hit <- false;
          snd z.frozen <- snd z.frozen - 1;*)
     let next_step = z.z_step - z.mummy.speed in
     let t = z.z_pos in
-  if next_step >= 0 then z.z_step <- next_step
+    if next_step >= 0 then (z.z_step <- next_step;
+    let x = z.z_pos.x + z.z_step in
+    let y = z.z_pos.y + z.z_pos.size/2 in
+    z.z_sprite.coords <- (float_of_int x, float_of_int y))
   else (remove_z t z;
   match t.left with
   |None -> begin t.tile_lost <- true end
@@ -188,7 +191,7 @@ let move_p p =
   let next_step = p.p_step + p.shooter.speed in
   let t = p.p_pos in
     if next_step < t.size then p.p_step <- next_step
-    else remove_p t p;
+    else (remove_p t p;
     match t.right with
     |None -> ()
     |Some r ->
@@ -197,7 +200,7 @@ let move_p p =
       let x = p.p_pos.x + p.p_step in
       let y = p.p_pos.y + p.p_pos.size/2 in
       p.sprite.coords <- (float_of_int x, float_of_int y);
-      r.projectiles <- p::(r.projectiles)
+      r.projectiles <- p::(r.projectiles))
 
 (* Assume that projectile originates from the center of the tile *)
 let make_projectile p =
