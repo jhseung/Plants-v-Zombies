@@ -62,6 +62,31 @@ let print_stock m =
                       |> print_endline)
     m.stock
 
+(*[get_sun_coords_col m c r lst] prepends the coordinates of sunlights in column
+  [c] in mega state [m] to the list [lst].
+  requires : [r] is 0.*)
+let rec get_sun_coords_col m c r lst =
+  if r >= m.row then
+    lst
+  else
+  if m.sun.(c).(r) = None then get_sun_coords_col m c (r+1) lst
+  else
+    let (x0,y0) = m.st.top_left in
+    let size = m.st.size in
+    let x = x0 + size * c + size / 2 |> float_of_int in
+    let y = y0 + size * r + size / 2 |> float_of_int in
+    get_sun_coords_col m c (r+1) ((x,y)::lst)
+
+(*[get_sun_coords_helper m c lst] prepends the coordinates of sunlights in all
+  the tiles in mega state [m] to the list [lst].
+  requires : [c] is 0. *)
+let rec get_sun_coords_helper m c lst =
+  if c >= m.col then
+    lst
+  else get_sun_coords_col m c 0 lst |> get_sun_coords_helper m (c+1)
+
+let get_sun_coords m = get_sun_coords_helper m 0 []
+
 let sunlight_of_tile (c, r) m = m.sun.(c).(r)
 
 (*[change_sun_bal amount m] is the mega state after the sun balance of mega

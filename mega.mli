@@ -44,6 +44,10 @@ val init_mega : int -> int -> int -> int*int -> int -> mega
   [None] if (x,y) is not contained in any tile.*)
 val tile_of_coord : int*int -> mega -> (int*int) option
 
+(*[get_sun_coords m] is the list of the coordinates of sunlights present in the
+  mega state [m].*)
+val get_sun_coords : mega -> (float*float) list
+
 (*[get_num_in_stock f m] is the number of the flora of type [f] in the stock in
   the mega state [m].*)
 val get_num_in_stock : flora_t -> mega -> int

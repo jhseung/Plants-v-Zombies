@@ -18,13 +18,6 @@ let tests1 =
   (fun _ -> assert_equal false (make_zombie "ocaml" (4,2) st;
                                 make_plant "peashooter" (3,3) st));
 
-  "get object types in a state with a sunflower and a zombie" >::
-  (fun _ -> assert_equal ["ocaml"; "sunflower"]
-      (make_zombie "ocaml" (4,2) st;
-       make_plant "sunflower" (9,2) st |> ignore;
-       let oblst = get_objects st in
-       List.map (get_type) oblst |> List.sort (String.compare)));
-
   "has_won false" >:: (fun _ -> assert_equal false (has_won st));
 
   "has_lost false" >:: (fun _ -> assert_equal false (has_lost st));
