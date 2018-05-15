@@ -87,7 +87,7 @@ let make_plant =
   {
     species = "sunflower";
     speed = 0;
-    hp = 20;
+    hp = 50;
     damage = 0;
     freeze = 0;
     full_growth = 10
@@ -135,7 +135,7 @@ let make_zombie =
     {
       species = "ocaml";
       speed = 1;
-      hp = 5;
+      hp = 50;
       damage = 1;
       freeze = 0;
       full_growth = 0

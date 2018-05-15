@@ -89,13 +89,13 @@ let remove_z t z =
 
 (* Updates the tile after removing zombie z from t.zombies *)
 let remove_p t p =
-  t.projectiles <- List.filter (fun x -> x != p) t.projectiles;;
+  t.projectiles <- List.filter (fun x -> x != p) t.projectiles
 
 let hit_z projectile zombie tile_l tile_r =
   remove_p tile_l projectile;
-  let next_hp = zombie.z_hp - projectile.shooter.damage in
+  (let next_hp = zombie.z_hp - projectile.shooter.damage in
   if next_hp > 0 then (zombie.z_hp <- next_hp; zombie.hit <- true;)
-  else remove_z tile_r zombie
+  else remove_z tile_r zombie)
 
 let rightmost_p tile default =
   List.fold_left
@@ -190,9 +190,12 @@ let move_z z = z.hit <- false;
 let move_p p =
   let next_step = p.p_step + p.shooter.speed in
   let t = p.p_pos in
-    if next_step < t.size then p.p_step <- next_step
-    else (remove_p t p;
-    match t.right with
+  if next_step < t.size then (p.p_step <- next_step;
+  let x = p.p_pos.x + p.p_step in
+  let y = p.p_pos.y + p.p_pos.size/2 in
+  p.sprite.coords <- (float_of_int x, float_of_int y))
+    else remove_p t p;
+    (match t.right with
     |None -> ()
     |Some r ->
       p.p_pos <- r;
