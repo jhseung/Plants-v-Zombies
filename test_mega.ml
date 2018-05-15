@@ -19,7 +19,7 @@ let tests1 =
   in
 [
   "peashooter in stock" >::
-  (fun _ -> assert_equal 0 (get_num_in_stock "peashooter" m));
+  (fun _ -> assert_equal 1 (get_num_in_stock "peashooter" m));
 
   "peashooter in stock selected" >::
   (fun _ -> assert_equal false (get_selected "peashooter" m));
@@ -58,8 +58,8 @@ let tests2 =
            [] tile_lst));
 
     "sunlight dissipated" >::
-    (fun _ -> assert_equal []
-        (let md = repeat update_mega 31 m in
+    (fun _ -> assert_equal [Some 11]
+        (let md = repeat update_mega 51 m in
          List.fold_left
            (fun acc (c,r) ->
               let age = sunlight_of_tile (c,r) md in
