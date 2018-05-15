@@ -6,10 +6,6 @@ module Html = Dom_html
 let js = Js.string
 let document = Html.document
 
-(* ARBITRARY FOR NOW *)
-let screen_width = 650.
-let screen_height = 350.
-
 let tile_offset_width = 0.
 let tile_offset_height = 80.
 
@@ -167,6 +163,9 @@ let to_sprites st =
 
 let get_sprites st = 
   let objects = get_objects st in
+  (* print_string "num objects";
+  print_int (List.length objects);
+  print_endline ""; *)
   let helper obj = 
     (match obj with
     | Zombie z -> z.z_sprite
@@ -180,7 +179,35 @@ let draw_sunlights context mega =
   let sprite_list = List.map (fun x -> to_sprite "sunlight" x) coords in
   List.map (fun x -> render_sprite context x) sprite_list |> ignore;;
 
-let render_page (context: Html.canvasRenderingContext2D Js.t) (mega:mega) = 
+let render_begin_page (context: Html.canvasRenderingContext2D Js.t) =
+  draw_with_context context "sprites/begin_game.png" (10.,10.);;
+
+let render_lose_page context =
+  draw_with_context context "sprites/defeat.png" (10.,10.);;
+
+let render_win_page context =
+  draw_with_context context "sprites/victory.png" (10.,10.);;
+
+let render_zombie_count context mega = 
+  let balance = js ("Zombies to come... " ^ (mega |> zombies_to_come |> string_of_int)) in
+  context##fillStyle <- js "red";
+  context##font <- js "16px Helvetica";
+  context##fillText (balance, 250., 30.);;
+
+let render_page 
+  (context: Html.canvasRenderingContext2D Js.t) 
+  (mega:mega) 
+  (start:bool) = 
+  clear_context context;
+  if mega.st |> has_lost then render_lose_page context 
+  else if mega.st |> has_won then render_win_page context
+  else if not start then 
+    begin
+    render_begin_page context;
+    end
+  else
+  begin
+  (* if has_lost mega.st then render_ *)
   clear_context context; 
   context |> draw_constants |> ignore;
   let spr_list = mega.st |> get_sprites in
@@ -188,3 +215,5 @@ let render_page (context: Html.canvasRenderingContext2D Js.t) (mega:mega) =
   draw_stock_balances context mega.stock;
   draw_sunlights context mega;
   draw_sprites context spr_list;
+  render_zombie_count context mega;
+  end;;

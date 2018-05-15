@@ -24,7 +24,7 @@ let to_sprite objtype coords =
     | "ocaml" -> "sprites/zombie_girl.png"
     | "projectile" -> "sprites/peashooter_projectile.png"
     | "sunflower" -> "sprites/sunflower.png"
-    | "sunlight" -> "sprites/sunlight.png"
+    | "sunlight" -> "sprites/sun.png"
     | _ -> ""
   ) in
   let size = (

@@ -71,9 +71,8 @@ let update_tiles tiles =
   iter_matrix (fun cell -> hit_before_crossing cell) tiles;
   iter_matrix (fun cell ->
       List.iter (fun z -> move_z z) cell.zombies) tiles;
-  Array.iter (fun row ->
-      Array.fold_right (fun cell _ ->
-          List.iter (fun p -> move_p p) cell.projectiles) row ()) tiles;
+  iter_matrix (fun cell ->
+          List.iter (fun p -> move_p p) cell.projectiles) tiles;
   iter_matrix (fun cell -> eat cell) tiles;
   iter_matrix (fun cell ->
       match cell.plant with
@@ -101,9 +100,9 @@ let make_plant =
       species = "peashooter";
       speed = 1;
       hp = 20;
-      damage = 1;
+      damage = 5;
       freeze = 1;
-      full_growth = 5
+      full_growth = 15
     } in
   let sunflower =
   {
@@ -161,7 +160,7 @@ let make_zombie =
     {
       species = "ocaml";
       speed = 1;
-      hp = 50;
+      hp = 20;
       damage = 1;
       freeze = 0;
       full_growth = 0
