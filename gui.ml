@@ -119,6 +119,8 @@ let render_sprite (context: Html.canvasRenderingContext2D Js.t) sprite =
   let (w,h) = sprite.frame_size in
   let (x,y) = sprite.coords in 
   img##src <- js sprite.reference;
+  print_string "X_coord";
+  print_endline (string_of_float x);
   context##drawImage_full (img, clipx, clipy, w, h, x, y, w, h);;
 
 let update_sprite spr =
@@ -152,6 +154,22 @@ let draw_sunflower_balance (context: Html.canvasRenderingContext2D Js.t) balance
   context##fillStyle <- js "black";
   context##font <- js "16px Helvetica";
   context##fillText (balance, 450., 30.);;
+
+let draw_stock_balance (context: Html.canvasRenderingContext2D Js.t) balance name =
+  let balance = js (name ^ ": " ^ string_of_int balance) in
+  context##fillStyle <- js "black";
+  context##font <- js "12px Helvetica";
+  match name with
+  | "sunflower" -> context##fillText (balance, 0., 50.);
+  | "peashooter" -> context##fillText (balance, 0., 50.);
+  | _ -> ();;
+
+let draw_stock_balances (context: Html.canvasRenderingContext2D Js.t) stock =
+  let get_bal = function
+  | (_,_,bal) -> bal in
+  let get_name = function 
+  | (name,_,_) -> name in
+  List.map (fun x -> draw_stock_balance context (get_bal x) (get_name x)) stock |> ignore;;
 
 let clear_context (context: Html.canvasRenderingContext2D Js.t) = 
   context##clearRect (0., 0., screen_height, screen_width) |> ignore
