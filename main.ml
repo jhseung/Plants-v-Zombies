@@ -18,7 +18,7 @@ let get_element id =
   Js.Opt.get (Html.document##getElementById (js id)) assert_fail
 
 (* Difficulty of playing level -- number of zombies *)
-let difficulty = 4
+let difficulty = 5
 
 (* Initialize mega state with ref *)
 let mega = ref (init_mega num_cols num_rows tile_size top_left_coord difficulty)
@@ -54,7 +54,7 @@ let mouseclick (event: Html.mouseEvent Js.t) =
   ) in
   let (curr, m) = make_move !prev_click click !mega in
   mega := m;
-  prev_click := click;
+  prev_click := curr;
 (*print_float (fst coords);
   print_float (snd coords);
   print_endline ("Coords:");*)
