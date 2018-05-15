@@ -1,5 +1,6 @@
 #directory "_build";;
 #directory "_build/model";;
+#load "sprite.d.cmo";;
 #load "object.d.cmo";;
 #load "state.d.cmo";;
 #load "mega.cmo";;

@@ -40,7 +40,7 @@ let init_mega c r size (x, y) total =
     col = c;
     row = r;
     sun = Array.make_matrix c r None;
-    sun_bal = 100;
+    sun_bal = 250;
     num_tiles_wout_sun = c * r;
     stock = ["sunflower", false, 1; "peashooter", false, 0];
     st = init_state r c size (x, y) total;
@@ -53,6 +53,39 @@ let tile_of_coord (x, y) m =
   let r = (y - y0) / (m.st).size in
   if c >= 0 && c < m.col && r >=0 && r < m.row then Some (c, r)
   else None
+
+(*[print_stock m] print the sun balance and stock of mega state [m].*)
+let print_stock m =
+  print_endline ("sun balance = "^(string_of_int m.sun_bal));
+  List.iter
+    (fun (f, s, n) -> f^","^(string_of_bool s)^","^(string_of_int n)
+                      |> print_endline)
+    m.stock
+
+(*[get_sun_coords_col m c r lst] prepends the coordinates of sunlights in column
+  [c] in mega state [m] to the list [lst].
+  requires : [r] is 0.*)
+let rec get_sun_coords_col m c r lst =
+  if r >= m.row then
+    lst
+  else
+  if m.sun.(c).(r) = None then get_sun_coords_col m c (r+1) lst
+  else
+    let (x0,y0) = m.st.top_left in
+    let size = m.st.size in
+    let x = x0 + size * c + size / 2 |> float_of_int in
+    let y = y0 + size * r + size / 2 |> float_of_int in
+    get_sun_coords_col m c (r+1) ((x,y)::lst)
+
+(*[get_sun_coords_helper m c lst] prepends the coordinates of sunlights in all
+  the tiles in mega state [m] to the list [lst].
+  requires : [c] is 0. *)
+let rec get_sun_coords_helper m c lst =
+  if c >= m.col then
+    lst
+  else get_sun_coords_col m c 0 lst |> get_sun_coords_helper m (c+1)
+
+let get_sun_coords m = get_sun_coords_helper m 0 []
 
 let sunlight_of_tile (c, r) m = m.sun.(c).(r)
 
@@ -108,14 +141,20 @@ let rec create_sunlights num m =
 (*[shed_sunlight m] creates an amount of sunlight according to the number of
   sunflowers present in the garden in mega state [m], within the constraint that
   there is as most one sunlight in every tile, and returns the new mega state.*)
-let shed_sunlight m =
-  create_sunlights (get_sunlight m.st) m
+let shed_sunlight =
+  let counter = ref 0 in
+  fun m ->
+    let n = get_sunlight m.st in
+    if n > 0 then
+      (counter := !counter + 1;
+       if !counter mod 4 = 0 then create_sunlights n m else m )
+    else m
 
 let collect_sunlight (c,r) m =
     change_sun_bal 50 m |> remove_sunlight (c,r)
 
 (*the number of steps for which a sunlight can be there before it disappears*)
-let life_span_of_sunlight = 5
+let life_span_of_sunlight = 30
 
 (*[dissipate_sunlight_col sun_col acc] adds 1 to each entry of the 1D array
   [sun_col] if that entry is less than [life_span_of_sunlight], makes the entry
@@ -170,7 +209,7 @@ let n_species = 2
 let price f =
   match f with
   | "peashooter" -> 100
-  | "sunflower" -> 50
+  | "sunflower" -> 100
   | _ -> failwith "unavailable flora in \'price\'"
 
 (*[flora_of_int i] is the flora type mapped to integer [i].*)
@@ -237,7 +276,9 @@ let update_mega =
   let counter = ref 0 in
   fun m ->
   let m' = dissipate_sunlight m |> add_to_stock |> shed_sunlight in
-  update m.st; counter := !counter + 1;
-  if !counter < 50 then m'
-  else if !counter mod 10 = 0 then (counter := 50; add_zombie m')
+  update m'.st; counter := !counter + 1;
+  (*get_sun_coords m' |> List.length |> string_of_int |> print_endline;*)
+  (*print_stock m';*)
+  if !counter < 80 then m'
+  else if !counter mod 40 = 0 then (counter := 80; add_zombie m')
   else m'

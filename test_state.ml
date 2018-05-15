@@ -18,29 +18,9 @@ let tests1 =
   (fun _ -> assert_equal false (make_zombie "ocaml" (4,2) st;
                                 make_plant "peashooter" (3,3) st));
 
-  "get object types in a state with a sunflower and a zombie" >::
-  (fun _ -> assert_equal ["ocaml"; "sunflower"]
-      (make_zombie "ocaml" (4,2) st;
-       let oblst = get_objects st in
-       List.map (get_type) oblst |> List.sort (String.compare)));
-
-  "get coordinates in a state with a sunflower and a zombie" >::
-  (fun _ -> assert_equal [(7,2);(4,2)]
-      (let oblst = get_objects st in
-       List.map (get_coordinates) oblst));
-
   "has_won false" >:: (fun _ -> assert_equal false (has_won st));
 
   "has_lost false" >:: (fun _ -> assert_equal false (has_lost st));
-
-  "get coordinates after update" >::
-  (fun _ -> assert_equal true
-      (update st;
-       let oblst = get_objects st in
-       match List.map (get_coordinates) oblst with
-       | [(7,2);(x,2)] -> if x < 4 then true else false
-       | _ -> false
-      ));
 
   "has_lost true" >::
   (fun _ -> assert_equal true
@@ -48,17 +28,19 @@ let tests1 =
 ]
 
 let tests2 =
-  let st2 = init_state 2 2 100 (0,0) 1 in
+  let st2 = init_state 2 3 5 (0,0) 1 in
   [
     "zombie gets killed" >::
     (fun _ -> assert_equal true
-        (make_plant "peashooter" (20,40) st2 |> ignore;
-         make_zombie "ocaml" (199,50) st2;
+        (make_plant "peashooter" (2,0) st2 |> ignore;
+         make_plant "peashooter" (7,0) st2 |> ignore;
+         update st2; update st2; update st2; update st2;
+         make_zombie "ocaml" (14,0) st2;
          let rec try_kill s acc =
            update s;
            if (get_objects s |> List.map get_type) = ["peashooter"] then
              true
-           else if acc > 200 then false
+           else if acc > 100 then false
            else try_kill s (acc+1)
          in try_kill st2 0)
     );
