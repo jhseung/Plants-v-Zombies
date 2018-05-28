@@ -64,20 +64,20 @@ let mouseclick (event: Html.mouseEvent Js.t) =
 
 let keyboard_down event =
   let () = match event##keyCode with
-  | 49 -> difficulty := 1; 
-          game_started := true; 
+  | 49 -> difficulty := 1;
+          game_started := true;
           mega := init_mega num_cols num_rows tile_size top_left_coord 1
   | 50 -> difficulty := 2;
-          game_started := true; 
+          game_started := true;
           mega := init_mega num_cols num_rows tile_size top_left_coord 2
-  | 51 -> difficulty := 3; 
-          game_started := true; 
+  | 51 -> difficulty := 3;
+          game_started := true;
           mega := init_mega num_cols num_rows tile_size top_left_coord 3
-  | 52 -> difficulty := 4; 
-          game_started := true; 
+  | 52 -> difficulty := 4;
+          game_started := true;
           mega := init_mega num_cols num_rows tile_size top_left_coord 4
-  | 53 -> difficulty := 5; 
-          game_started := true; 
+  | 53 -> difficulty := 5;
+          game_started := true;
           mega := init_mega num_cols num_rows tile_size top_left_coord 5
   | _ -> ()
   in Js._true;;
@@ -118,7 +118,7 @@ let start () =
   let context = canvas##getContext (Html._2d_) in
   let _ = Html.addEventListener
     document Html.Event.mousedown (Html.handler mouseclick)
-    Js._true in 
+    Js._true in
   let _ = Html.addEventListener
     document Html.Event.keydown (Html.handler keyboard_down)
     Js._true in
